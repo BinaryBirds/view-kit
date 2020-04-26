@@ -13,13 +13,11 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.4.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0-rc"),
-        .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0-rc"),
     ],
     targets: [
         .target(name: "ViewKit", dependencies: [
             .product(name: "Vapor", package: "vapor"),
             .product(name: "Fluent", package: "fluent"),
-            .product(name: "Leaf", package: "leaf"),
         ]),
         .testTarget(name: "ViewKitTests", dependencies: ["ViewKit"]),
     ]
