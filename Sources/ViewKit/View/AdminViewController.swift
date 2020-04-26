@@ -13,7 +13,10 @@ public protocol AdminViewController: ListViewController,
     UpdateViewController,
     DeleteViewController
 {
-    func setupRoutes(routes: RoutesBuilder, on pathComponent: PathComponent, create: PathComponent)
+    func setupRoutes(routes: RoutesBuilder,
+                     on pathComponent: PathComponent,
+                     create: PathComponent,
+                     delete: PathComponent)
 }
 
 public extension AdminViewController {

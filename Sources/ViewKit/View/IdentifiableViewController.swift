@@ -16,13 +16,13 @@ public protocol IdentifiableViewController: ViewController {
 }
 
 public extension IdentifiableViewController {
-    var idParameKey: String { "id" }
+    var idParamKey: String { "id" }
     var idPathComponent: PathComponent { .init(stringLiteral: ":\(self.idParamKey)") }
 }
 
 public extension IdentifiableViewController where Model.IDValue == UUID {
 
-    func findByIdParameter(_ req: Request) throws -> EventLoopFuture<Model> {
+    func find(_ req: Request) throws -> EventLoopFuture<Model> {
         guard
             let id = req.parameters.get(self.idParamKey),
             let uuid = UUID(uuidString: id)

@@ -17,4 +17,3 @@ public protocol ViewContextRepresentable {
     var viewContext: ViewContext { get }
     var viewIdentifier: String { get }
 }
-

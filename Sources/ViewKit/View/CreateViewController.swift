@@ -17,7 +17,7 @@ public protocol CreateViewController: EditViewController {
     /// create handler for the form submission
     func create(req: Request) throws -> EventLoopFuture<Response>
 
-    func setupCreateRoutes(routes: RoutesBuilder)
+    func setupCreateRoutes(routes: RoutesBuilder, on pathComponent: PathComponent)
 }
 
 public extension CreateViewController {

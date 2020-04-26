@@ -14,7 +14,7 @@ public protocol DeleteViewController: IdentifiableViewController {
     /// deletes a model from the database
     func delete(req: Request) throws -> EventLoopFuture<String>
     
-    func setupDeleteRoute(routes: RoutesBuilder)
+    func setupDeleteRoute(routes: RoutesBuilder, on pathComponent: PathComponent)
 }
 
 public extension DeleteViewController {
