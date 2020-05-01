@@ -1,6 +1,6 @@
 # ViewKit
 
-A generic, reusable view layer for building (not just) admin interfaces using Vapor 4. 
+A generic, reusable view layer for building (not just) admin interfaces using Vapor 4.
 
 
 ## Install
@@ -8,7 +8,7 @@ A generic, reusable view layer for building (not just) admin interfaces using Va
 Add the repository as a dependency:
 
 ```swift
-.package(url: "https://github.com/binarybirds/view-kit.git", from: "1.0.0"),
+.package(url: "https://github.com/binarybirds/view-kit.git", from: "1.1.0"),
 ```
 
 Add ViperKit to the target dependencies:
@@ -31,7 +31,7 @@ import ViewKit
 final class ExampleModel: Model {
 
     static let schema = "examples"
-    
+
     struct FieldKeys {
         static var foo: FieldKey { "foo" }
         static var bar: FieldKey { "bar" }
@@ -40,9 +40,9 @@ final class ExampleModel: Model {
     @ID() var id: UUID?
     @Field(key: FieldKeys.foo) var foo: String
     @Field(key: FieldKeys.bar) var bar: Int
-    
+
     init() { }
-    
+
     init(id: UUID? = nil, foo: String, bar: Int) {
         self.id = id
         self.foo = foo
@@ -93,7 +93,7 @@ Make a new template for the list, you can use [Leaf](https://github.com/vapor/le
             <td>#(item.foo)</td>
             <td>#(item.bar)</td>
             <td>
-                <a href="/examples/#(item.id)">Edit</a> &middot; 
+                <a href="/examples/#(item.id)">Edit</a> &middot;
                 <a id="#(item.id)" href="#" onClick="confirmDelete('/examples/', this.id);">Delete</a>
             </td>
         </tr>
@@ -140,9 +140,9 @@ final class ExampleEditForm: Form {
     var id: String? = nil
     var foo = BasicFormField()
     var bar = BasicFormField()
-    
+
     init() {}
-    
+
     init(req: Request) throws {
         let context = try req.content.decode(Input.self)
         if !context.id.isEmpty {
@@ -152,12 +152,12 @@ final class ExampleEditForm: Form {
         self.foo.value = context.foo
         self.bar.value = context.bar
     }
-    
+
     func write(to model: ExampleModel) {
         model.foo = self.foo.value
         model.bar = Int(self.bar.value)!
     }
-    
+
     func read(from model: ExampleModel )  {
         self.id = model.id!.uuidString
         self.foo.value = model.foo
@@ -203,7 +203,7 @@ Make a view template for the form:
             #(edit.bar.error)
         #endif
     </section>
-    
+
     <section>
         <input type="submit" value="Save">
     </section>
@@ -221,7 +221,7 @@ final class ExampleController: AdminViewController {
     // path to the templates based on your configuration
     var listView: String = "list"
     var editView: String = "edit"
-    
+
     typealias Model = ExampleModel
     typealias EditForm = ExampleEditForm
 }
@@ -247,10 +247,10 @@ import ViewKit
 final class ExampleController: AdminViewController {
     var listView: String = ""
     var editView: String = ""
-    
+
     typealias Model = ExampleModel
     typealias EditForm = ExampleEditForm
-    
+
     func beforeRender(req: Request, form: EditForm) -> EventLoopFuture<Void> {
         req.eventLoop.future()
     }
@@ -269,7 +269,7 @@ final class ExampleController: AdminViewController {
     func beforeDelete(req: Request, model: Model) -> EventLoopFuture<Model> {
         req.eventLoop.future(model)
     }
-    
+
     func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
         let response = req.redirect(to: model.viewIdentifier)
         return req.eventLoop.makeSucceededFuture(response)

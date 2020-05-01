@@ -15,7 +15,7 @@ public protocol EditViewController: IdentifiableViewController {
     /// the name of the edit view template
     var editView: String { get }
     
-    var fileUploadLimit: Int { get }
+    var fileUploadLimit: ByteCount { get }
 
     /// this is called before the form rendering happens (used both in createView and updateView)
     func beforeRender(req: Request, form: EditForm) -> EventLoopFuture<Void>
@@ -28,8 +28,7 @@ public protocol EditViewController: IdentifiableViewController {
 
 public extension EditViewController {
     
-    // 10MB
-    var fileUploadLimit: Int { 10_000_000 }
+    var fileUploadLimit: ByteCount { "10mb" }
 
     func beforeRender(req: Request, form: EditForm) -> EventLoopFuture<Void> {
         req.eventLoop.future()

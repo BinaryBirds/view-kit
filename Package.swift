@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "ViewKitDynamic", type: .dynamic, targets: ["ViewKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.4.0"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.5.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0-rc"),
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.0.0-rc"),
     ],
