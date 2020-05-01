@@ -22,5 +22,9 @@ public struct SelectionFormField: FormField {
         self.error = error
         self.options = options
     }
-}
 
+    /// validates if the given key is an available option
+    public func validate(key: String) -> Bool {
+        self.options.contains { $0.key == key }
+    }
+}
