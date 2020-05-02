@@ -8,7 +8,6 @@ let package = Package(
     ],
     products: [
         .library(name: "ViewKit", targets: ["ViewKit"]),
-        .library(name: "ViewKitDynamic", type: .dynamic, targets: ["ViewKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.5.0"),
