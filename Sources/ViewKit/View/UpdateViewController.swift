@@ -5,9 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 26..
 //
 
-import Vapor
-import Fluent
-
 public protocol UpdateViewController: EditViewController {
     /// renders the update form filled with the entity
     func updateView(req: Request) throws -> EventLoopFuture<View>

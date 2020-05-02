@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 21..
 //
 
-import Foundation
-
 /// can be used for option lists
 public struct SelectionFormField: FormField {
 

@@ -5,9 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 26..
 //
 
-import Vapor
-import Fluent
-
 public protocol DeleteViewController: IdentifiableViewController {
     /// this will be called before the model is deleted
     func beforeDelete(req: Request, model: Model) -> EventLoopFuture<Model>

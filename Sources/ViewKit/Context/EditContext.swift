@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 25..
 //
 
-import Foundation
-
 /// a generic edit context for rendering forms
 public struct EditContext<T: Encodable>: Encodable {
     /// encodable edit property

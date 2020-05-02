@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 21..
 //
 
-import Foundation
-
 /// used to store simple text values
 public struct BasicFormField: FormField {
 

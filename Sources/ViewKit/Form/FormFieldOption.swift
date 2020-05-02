@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 26..
 //
 
-import Foundation
-
 /// selectable option
 public struct FormFieldOption: Encodable {
     /// key of the option

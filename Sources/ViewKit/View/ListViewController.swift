@@ -5,9 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 26..
 //
 
-import Vapor
-import Fluent
-
 public protocol ListViewController: ViewController {
     /// the name of the list view template
     var listView: String { get }

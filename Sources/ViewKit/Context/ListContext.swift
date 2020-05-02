@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 25..
 //
 
-import Foundation
-
 /// a generic list context for rendering list items
 public struct ListContext<T: Encodable>: Encodable {
     /// encodable list property

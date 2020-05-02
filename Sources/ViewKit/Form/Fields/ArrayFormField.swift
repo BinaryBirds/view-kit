@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 23..
 //
 
-import Foundation
-
 /// can be used to store multiple text values
 public struct ArrayFormField: FormField {
     

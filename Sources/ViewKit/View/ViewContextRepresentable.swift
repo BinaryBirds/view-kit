@@ -5,9 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 25..
 //
 
-import Vapor
-import Fluent
-
 /// returns a contexts for the rendered views
 public protocol ViewContextRepresentable {
     /// generic context type
