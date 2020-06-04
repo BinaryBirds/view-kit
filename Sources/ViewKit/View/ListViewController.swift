@@ -11,6 +11,8 @@ public protocol ListViewController: ViewController {
     /// builds the query in order to list objects in the admin interface
     func beforeList(req: Request, queryBuilder: QueryBuilder<Model>) throws -> QueryBuilder<Model>
  
+    func listView(req: Request) throws -> EventLoopFuture<View>
+
     func setupListRoute(routes: RoutesBuilder)
 }
 
