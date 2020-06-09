@@ -13,6 +13,8 @@ public protocol CreateViewController: EditViewController {
     func beforeCreate(req: Request, model: Model, form: EditForm) -> EventLoopFuture<Model>
     /// create handler for the form submission
     func create(req: Request) throws -> EventLoopFuture<Response>
+    
+    func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response>
 
     func setupCreateRoutes(routes: RoutesBuilder, on pathComponent: PathComponent)
 }
