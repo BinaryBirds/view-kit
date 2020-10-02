@@ -27,30 +27,38 @@ final class ViewKitTests: XCTestCase {
             switch query.action {
             case .create, .update:
                 return [result[0]]
+            case .aggregate(_):
+                return [TestOutput([.aggregate: result.count])]
             default:
                 return result
             }
         }
 
         app.databases.use(db.configuration, as: .test)
-        app.views.use { app  in TestRenderer(eventLoopGroup: app.eventLoopGroup) }
+        app.views.use { TestRenderer(eventLoopGroup: $0.eventLoopGroup) }
 
         ExampleController().setupRoutes(routes: app.routes, on: "examples")
 
-        try app.test(.GET, "/examples") { res in
+        try app.test(.GET, "examples") { res in
             XCTAssertEqual(res.status, .ok)
             struct TestResult: Codable {
+                struct Metadata: Codable {
+                    let limit: Int
+                    let total: Int
+                    let page: Int
+                }
                 struct Result: Codable {
                     var id: UUID
                     var foo: String
                     var bar: Int?
                 }
-                var list: [Result]
+                var items: [Result]
+                var metadata: Metadata
             }
 
             let decoder = try! ContentConfiguration.global.requireDecoder(for: .json)
             let content = try! decoder.decode(TestResult.self, from: res.body, headers: res.headers)
-            XCTAssertEqual(content.list.count, 10)
+            XCTAssertEqual(content.items.count, 10)
         }
     }
 }
