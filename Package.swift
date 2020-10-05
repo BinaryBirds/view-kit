@@ -12,7 +12,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.30.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.0.0-rc"),
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.0.0"),
     ],
     targets: [
         .target(name: "ViewKit", dependencies: [
