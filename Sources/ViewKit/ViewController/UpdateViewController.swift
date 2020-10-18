@@ -15,7 +15,7 @@ public protocol UpdateViewController: EditViewController {
     
     func afterUpdate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response>
     
-    func setupUpdateRoutes(routes: RoutesBuilder)
+    func setupUpdateRoutes(on: RoutesBuilder)
 }
 
 public extension UpdateViewController {
@@ -25,10 +25,10 @@ public extension UpdateViewController {
     }
     
     func updateView(req: Request) throws -> EventLoopFuture<View>  {
-        try self.find(req).flatMap { model in
+        try find(req).flatMap { model in
             let form = EditForm()
-            form.read(from: model as! Self.EditForm.Model)
-            return self.render(req: req, form: form)
+            form.read(from: model as! EditForm.Model)
+            return render(req: req, form: form)
         }
     }
     
@@ -36,19 +36,19 @@ public extension UpdateViewController {
         let form = try EditForm(req: req)
         return form.validate(req: req).flatMap { isValid in
             guard isValid else {
-                return self.beforeInvalidRender(req: req, form: form)
-                    .flatMap { self.render(req: req, form: $0).encodeResponse(for: req) }
+                return beforeInvalidRender(req: req, form: form)
+                    .flatMap { render(req: req, form: $0).encodeResponse(for: req) }
             }
             do {
-                return try self.find(req)
-                    .flatMap { self.beforeUpdate(req: req, model: $0, form: form) }
+                return try find(req)
+                    .flatMap { beforeUpdate(req: req, model: $0, form: form) }
                     .flatMap { model -> EventLoopFuture<Model> in
-                        form.write(to: model as! Self.EditForm.Model)
+                        form.write(to: model as! EditForm.Model)
                         return model.update(on: req.db).map { model }
                 }
                 .flatMap { model in
-                    form.read(from: model as! Self.EditForm.Model)
-                    return self.afterUpdate(req: req, form: form, model: model)
+                    form.read(from: model as! EditForm.Model)
+                    return afterUpdate(req: req, form: form, model: model)
                 }
             }
             catch {
@@ -58,11 +58,11 @@ public extension UpdateViewController {
     }
 
     func afterUpdate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
-        self.render(req: req, form: form).encodeResponse(for: req)
+        render(req: req, form: form).encodeResponse(for: req)
     }
 
-    func setupUpdateRoutes(routes: RoutesBuilder) {
-        routes.get(self.idPathComponent, use: self.updateView)
-        routes.on(.POST, self.idPathComponent, body: .collect(maxSize: self.fileUploadLimit), use: self.update)
+    func setupUpdateRoutes(on builder: RoutesBuilder) {
+        builder.get(idPathComponent, use: updateView)
+        builder.on(.POST, idPathComponent, body: .collect(maxSize: fileUploadLimit), use: update)
     }
 }

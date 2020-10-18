@@ -54,22 +54,15 @@ final class ExampleModel: Model {
 Extend the model, so views can render it:
 
 ```swift
-extension ExampleModel: ViewContextRepresentable {
+extension ExampleModel: LeafDataRepresentable {
 
-    struct ViewContext: Encodable {
-        var id: String
-        var foo: String
-        var bar: Int
-
-        init(model: ExampleModel) {
-            self.id = model.id!.uuidString
-            self.foo = model.foo
-            self.bar = model.bar
-        }
+    var leafData: LeafData { 
+        .dictionary([
+            "id": .string(id!.uuidString),
+            "foo": .string(foo),
+            "bar": .int(bar),
+        ])
     }
-
-    var viewIdentifier: String { self.id!.uuidString }
-    var viewContext: ViewContext { .init(model: self) }
 }
 ```
 
@@ -138,36 +131,36 @@ final class ExampleEditForm: Form {
     }
 
     var id: String? = nil
-    var foo = BasicFormField()
-    var bar = BasicFormField()
+    var foo = StringFormField()
+    var bar = StringFormField()
 
     init() {}
 
     init(req: Request) throws {
         let context = try req.content.decode(Input.self)
         if !context.id.isEmpty {
-            self.id = context.id
+            id = context.id
         }
 
-        self.foo.value = context.foo
-        self.bar.value = context.bar
+        foo.value = context.foo
+        bar.value = context.bar
     }
 
     func write(to model: ExampleModel) {
-        model.foo = self.foo.value
-        model.bar = Int(self.bar.value)!
+        model.foo = foo.value
+        model.bar = Int(bar.value)!
     }
 
     func read(from model: ExampleModel )  {
-        self.id = model.id!.uuidString
-        self.foo.value = model.foo
-        self.bar.value = String(model.foo)
+        id = model.id!.uuidString
+        foo.value = model.foo
+        bar.value = String(model.foo)
     }
 
     func validate(req: Request) -> EventLoopFuture<Bool> {
         var valid = true
-        if Int(self.bar.value) == nil {
-            self.bar.error = "Bar is not an integer"
+        if Int(bar.value) == nil {
+            bar.error = "Bar is not an integer"
             valid = false
         }
         return req.eventLoop.future(valid)
@@ -275,7 +268,7 @@ final class ExampleController: AdminViewController {
         return req.eventLoop.makeSucceededFuture(response)
     }
     func afterUpdate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
-        self.render(req: req, form: form).encodeResponse(for: req)
+        render(req: req, form: form).encodeResponse(for: req)
     }
 }
 ```

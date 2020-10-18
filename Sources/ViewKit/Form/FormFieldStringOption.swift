@@ -6,7 +6,7 @@
 //
 
 /// selectable option
-public struct FormFieldOption: Encodable {
+public struct FormFieldStringOption: LeafDataRepresentable {
     /// key of the option
     public let key: String
     /// title of the option
@@ -17,25 +17,34 @@ public struct FormFieldOption: Encodable {
         self.label = label
     }
 
+    public var leafData: LeafData {
+        .dictionary([
+            "key": .string(key),
+            "label": .string(label),
+        ])
+    }
+}
+
+public extension FormFieldStringOption {
     /// constructs a new set of yes and no options
-    public static func yesNo() -> [FormFieldOption] {
+    static func yesNo() -> [FormFieldStringOption] {
         ["yes", "no"].map { .init(key: $0, label: $0.capitalized) }
     }
 
     /// constructs a new set of boolean options
-    public static func trueFalse() -> [FormFieldOption] {
+    static func trueFalse() -> [FormFieldStringOption] {
         [true, false].map { .init(key: String($0), label: String($0).capitalized) }
     }
     
     /// constructs a new set of options based on the given integer numbers
-    public static func numbers(_ numbers: [Int]) -> [FormFieldOption] {
+    static func numbers(_ numbers: [Int]) -> [FormFieldStringOption] {
         numbers.map { .init(key: String($0), label: String($0)) }
     }
 }
 
 /// form field option representable
-public protocol FormFieldOptionRepresentable {
+public protocol FormFieldStringOptionRepresentable {
     
-    /// transforms the current object to a FormFieldOption
-    var formFieldOption: FormFieldOption { get }
+    /// transforms the current object to a FormFieldStringOption
+    var formFieldStringOption: FormFieldStringOption { get }
 }

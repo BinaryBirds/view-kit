@@ -14,14 +14,14 @@ public protocol IdentifiableViewController: ViewController {
 
 public extension IdentifiableViewController {
     var idParamKey: String { "id" }
-    var idPathComponent: PathComponent { .init(stringLiteral: ":\(self.idParamKey)") }
+    var idPathComponent: PathComponent { .init(stringLiteral: ":\(idParamKey)") }
 }
 
 public extension IdentifiableViewController where Model.IDValue == UUID {
 
     func find(_ req: Request) throws -> EventLoopFuture<Model> {
         guard
-            let id = req.parameters.get(self.idParamKey),
+            let id = req.parameters.get(idParamKey),
             let uuid = UUID(uuidString: id)
         else {
             throw Abort(.badRequest)

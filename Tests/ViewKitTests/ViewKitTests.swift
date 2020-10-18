@@ -35,17 +35,18 @@ final class ViewKitTests: XCTestCase {
         }
 
         app.databases.use(db.configuration, as: .test)
+        // NOTE: this will fail from now on... since Leaf is doing the rendering in all cases...
         app.views.use { TestRenderer(eventLoopGroup: $0.eventLoopGroup) }
 
-        ExampleController().setupRoutes(routes: app.routes, on: "examples")
+        ExampleController().setupRoutes(on: app.routes, as: "examples")
 
         try app.test(.GET, "examples") { res in
             XCTAssertEqual(res.status, .ok)
             struct TestResult: Codable {
-                struct Metadata: Codable {
+                struct Info: Codable {
                     let limit: Int
                     let total: Int
-                    let page: Int
+                    let current: Int
                 }
                 struct Result: Codable {
                     var id: UUID
@@ -53,7 +54,7 @@ final class ViewKitTests: XCTestCase {
                     var bar: Int?
                 }
                 var items: [Result]
-                var metadata: Metadata
+                var info: Info
             }
 
             let decoder = try! ContentConfiguration.global.requireDecoder(for: .json)

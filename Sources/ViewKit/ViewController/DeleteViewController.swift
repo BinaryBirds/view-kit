@@ -11,7 +11,7 @@ public protocol DeleteViewController: IdentifiableViewController {
     /// deletes a model from the database
     func delete(req: Request) throws -> EventLoopFuture<String>
     
-    func setupDeleteRoute(routes: RoutesBuilder, on pathComponent: PathComponent)
+    func setupDeleteRoute(on: RoutesBuilder, as: PathComponent)
 }
 
 public extension DeleteViewController {
@@ -20,13 +20,16 @@ public extension DeleteViewController {
         req.eventLoop.future(model)
     }
 
+    func setupDeleteRoute(on builder: RoutesBuilder, as pathComponent: PathComponent) {
+        builder.post(idPathComponent, pathComponent, use: delete)
+    }
+}
+
+public extension DeleteViewController where Model.IDValue == UUID {
     func delete(req: Request) throws -> EventLoopFuture<String> {
-        try self.find(req)
-            .flatMap { self.beforeDelete(req: req, model: $0) }
-            .flatMap { model in model.delete(on: req.db).transform(to: model.viewIdentifier) }
+        try find(req)
+            .flatMap { beforeDelete(req: req, model: $0) }
+            .flatMap { model in model.delete(on: req.db).transform(to: model.id!.uuidString) }
     }
-    
-    func setupDeleteRoute(routes: RoutesBuilder, on pathComponent: PathComponent) {
-        routes.post(self.idPathComponent, pathComponent, use: self.delete)
-    }
+
 }

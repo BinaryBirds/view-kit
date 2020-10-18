@@ -19,7 +19,7 @@ struct TestRenderer: ViewRenderer {
     }
     
     func render<E>(_ name: String, _ context: E) -> EventLoopFuture<View> where E : Encodable {
-        let eventLoop = self.eventLoopGroup.next()
+        let eventLoop = eventLoopGroup.next()
 
         var headers = HTTPHeaders()
         var buffer = ByteBufferAllocator().buffer(capacity: 0)

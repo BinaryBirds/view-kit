@@ -26,4 +26,13 @@ public struct FileFormField: FormField {
         self.data = data
         self.delete = delete
     }
+    
+    public var leafData: LeafData {
+        .dictionary([
+            "value": .string(value),
+            "error": .string(error),
+            "data": .data(data),
+            "delete": .bool(delete),
+        ])
+    }
 }

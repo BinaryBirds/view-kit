@@ -1,12 +1,12 @@
 //
-//  BasicFormField.swift
+//  StringFormField.swift
 //  ViewKit
 //
 //  Created by Tibor Bodecs on 2020. 04. 21..
 //
 
-/// used to store simple text values
-public struct BasicFormField: FormField {
+/// used to store simple string values
+public struct StringFormField: FormField {
 
     /// value of the form field
     public var value: String
@@ -17,4 +17,12 @@ public struct BasicFormField: FormField {
         self.value = value
         self.error = error
     }
+
+    public var leafData: LeafData {
+        .dictionary([
+            "value": .string(value),
+            "error": .string(error),
+        ])
+    }
+    
 }

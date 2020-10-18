@@ -32,8 +32,8 @@ public extension EditViewController {
     }
 
     func render(req: Request, form: EditForm) -> EventLoopFuture<View> {
-        return self.beforeRender(req: req, form: form)
-        .flatMap { req.view.render(self.editView, EditContext(form)) }
+        return beforeRender(req: req, form: form)
+            .flatMap { req.leaf.render(template: editView, context: ["edit": form.leafData]) }
     }
 
     func beforeInvalidRender(req: Request, form: EditForm) -> EventLoopFuture<EditForm> {

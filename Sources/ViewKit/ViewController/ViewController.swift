@@ -7,5 +7,5 @@
 
 public protocol ViewController {
     
-    associatedtype Model: Fluent.Model & ViewContextRepresentable
+    associatedtype Model: Fluent.Model & LeafDataRepresentable
 }

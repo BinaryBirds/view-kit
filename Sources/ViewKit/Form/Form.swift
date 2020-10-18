@@ -6,7 +6,7 @@
 //
 
 /// can be used to build forms
-public protocol Form: AnyObject, Encodable {
+public protocol Form: AnyObject, LeafDataRepresentable {
 
     /// the associated model
     associatedtype Model: Fluent.Model

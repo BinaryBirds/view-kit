@@ -16,7 +16,7 @@ public protocol CreateViewController: EditViewController {
     
     func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response>
 
-    func setupCreateRoutes(routes: RoutesBuilder, on pathComponent: PathComponent)
+    func setupCreateRoutes(on: RoutesBuilder, as: PathComponent)
 }
 
 public extension CreateViewController {
@@ -26,33 +26,35 @@ public extension CreateViewController {
     }
 
     func createView(req: Request) throws -> EventLoopFuture<View>  {
-        self.render(req: req, form: .init())
+        render(req: req, form: .init())
     }
 
     func create(req: Request) throws -> EventLoopFuture<Response> {
         let form = try EditForm(req: req)
         return form.validate(req: req).flatMap { isValid in
             guard isValid else {
-                return self.beforeInvalidRender(req: req, form: form)
-                    .flatMap { self.render(req: req, form: $0).encodeResponse(for: req) }
+                return beforeInvalidRender(req: req, form: form)
+                    .flatMap { render(req: req, form: $0).encodeResponse(for: req) }
             }
             let model = Model()
-            return self.beforeCreate(req: req, model: model, form: form)
+            return beforeCreate(req: req, model: model, form: form)
             .flatMap { model in
-                form.write(to: model as! Self.EditForm.Model)
+                form.write(to: model as! EditForm.Model)
                 return model.create(on: req.db)
-                    .flatMap { self.afterCreate(req: req, form: form, model: model) }
+                    .flatMap { afterCreate(req: req, form: form, model: model) }
             }
         }
     }
-    
-    func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
-        let response = req.redirect(to: model.viewIdentifier)
-        return req.eventLoop.makeSucceededFuture(response)
+        
+    func setupCreateRoutes(on builder: RoutesBuilder, as pathComponent: PathComponent) {
+        builder.get(pathComponent, use: createView)
+        builder.on(.POST, pathComponent, body: .collect(maxSize: fileUploadLimit), use: create)
     }
-    
-    func setupCreateRoutes(routes: RoutesBuilder, on pathComponent: PathComponent) {
-        routes.get(pathComponent, use: self.createView)
-        routes.on(.POST, pathComponent, body: .collect(maxSize: self.fileUploadLimit), use: self.create)
+}
+
+public extension CreateViewController where Model.IDValue == UUID {
+    func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
+        let response = req.redirect(to: model.id!.uuidString)
+        return req.eventLoop.makeSucceededFuture(response)
     }
 }

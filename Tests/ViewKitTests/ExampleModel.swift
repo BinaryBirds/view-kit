@@ -7,6 +7,7 @@
 
 import Vapor
 import Fluent
+import Leaf
 @testable import ViewKit
 
 final class ExampleModel: Model {
@@ -31,20 +32,14 @@ final class ExampleModel: Model {
     }
 }
 
-extension ExampleModel: ViewContextRepresentable {
+extension ExampleModel: LeafDataRepresentable {
 
-    struct ViewContext: Encodable {
-        var id: String
-        var foo: String
-        var bar: Int
-
-        init(model: ExampleModel) {
-            self.id = model.id!.uuidString
-            self.foo = model.foo
-            self.bar = model.bar
-        }
+    var leafData: LeafData {
+        .dictionary([
+            "id": .string(id?.uuidString),
+            "foo": .string(foo),
+            "bar": .int(bar),
+        ])
     }
-
-    var viewIdentifier: String { self.id!.uuidString }
-    var viewContext: ViewContext { .init(model: self) }
+    
 }
