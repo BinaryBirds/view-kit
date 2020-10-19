@@ -82,7 +82,7 @@ public extension ListViewController {
         }
         .map { $0.map(\.leafData) }
         .flatMap {
-            req.leaf.render(template: listView, context: $0.leafContext)
+            req.leaf.render(template: listView, context: ["list": $0.leafData])
         }
     }
 

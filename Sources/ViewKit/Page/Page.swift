@@ -6,7 +6,7 @@
 //
 
 /// a custom paged list with metadata information
-public struct Page<T>: LeafContextRepresentable where T: LeafDataRepresentable {
+public struct Page<T>: LeafDataRepresentable where T: LeafDataRepresentable {
 
     /// paged generic encodable items
     public let items: [T]
@@ -25,11 +25,11 @@ public struct Page<T>: LeafContextRepresentable where T: LeafDataRepresentable {
         try .init(items.map(transform), info: info)
     }
    
-    public var leafContext: LeafRenderer.Context {
-        [
+    public var leafData: LeafData {
+        .dictionary([
             "items": .array(items.map(\.leafData)),
             "info": info.leafData
-        ]
+        ])
     }
 }
 
