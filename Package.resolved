@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
           "branch": null,
-          "revision": "4b4d6605aa2e4f0c2ae3c7563795ae3bec259fff",
-          "version": "1.2.1"
+          "revision": "0a8dddbe15cd72f7bb5e47951fb7c1eb0836dfc2",
+          "version": "1.2.2"
         }
       },
       {
@@ -42,26 +42,26 @@
         "repositoryURL": "https://github.com/vapor/fluent-kit",
         "state": {
           "branch": null,
-          "revision": "ef2a9a76c48856f0388ee2026d67d2ebde8c571c",
-          "version": "1.7.3"
+          "revision": "31d96b547cc1f869f2885d932a8a9a7ae2103fc6",
+          "version": "1.10.0"
         }
       },
       {
         "package": "leaf",
-        "repositoryURL": "https://github.com/tib/leaf",
+        "repositoryURL": "https://github.com/vapor/leaf",
         "state": {
           "branch": null,
-          "revision": "a7dd82e532071f2baee500b52c20c6f41b78d0b7",
-          "version": "4.0.0-rc.1.5"
+          "revision": "a8348b682ec14a863cc470a2da8f0ebc262c6088",
+          "version": "4.0.0-tau.1"
         }
       },
       {
         "package": "leaf-kit",
-        "repositoryURL": "https://github.com/tib/leaf-kit.git",
+        "repositoryURL": "https://github.com/vapor/leaf-kit",
         "state": {
           "branch": null,
-          "revision": "d8476b10a38bddcb4c67eecf00d75e0f1ea615dc",
-          "version": "1.0.0-rc.1.18"
+          "revision": "8b965e6e2eadfe5914ea133669368aceb2b89ccb",
+          "version": "1.0.0-tau.1.1"
         }
       },
       {
@@ -168,8 +168,8 @@
         "repositoryURL": "https://github.com/vapor/vapor",
         "state": {
           "branch": null,
-          "revision": "29f5370b119593083674a4f7e6795ac2f4d884ef",
-          "version": "4.32.0"
+          "revision": "b040f90b80ac5906fcf1476a46d360c159f01892",
+          "version": "4.35.0"
         }
       },
       {
@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "b0736014be634475dac4c23843811257d86dcdc1",
-          "version": "2.1.1"
+          "revision": "2b06a70dfcfa76a2e5079f60e3ae911511f09db0",
+          "version": "2.1.2"
         }
       }
     ]
