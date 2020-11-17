@@ -67,8 +67,10 @@ public extension ListViewController {
         if let sortQuery: String = req.query[listSortKey], let sortValue = Sort(rawValue: sortQuery) {
             sort = sortValue
         }
-        /// we also use apply the custom order if it is allowed to order the list
-        if !listAllowedOrders.isEmpty, let orderValue: String = req.query[listOrderKey] {
+        /// if custom ordering is allowed
+        if !listAllowedOrders.isEmpty {
+            /// we check for a new order using the query, otherwise we use the first element of the allowed orders
+            let orderValue: String = req.query[listOrderKey] ?? listAllowedOrders[0].description
             let order = FieldKey(stringLiteral: orderValue)
             /// only allow ordering if the order value is in the allowed orders array
             if listAllowedOrders.contains(order) {
