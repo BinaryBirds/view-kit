@@ -264,8 +264,7 @@ final class ExampleController: AdminViewController {
     }
 
     func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
-        let response = req.redirect(to: model.viewIdentifier)
-        return req.eventLoop.makeSucceededFuture(response)
+        req.eventLoop.future(req.redirect(to: model.viewIdentifier))
     }
     func afterUpdate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
         render(req: req, form: form).encodeResponse(for: req)

@@ -56,8 +56,8 @@ public extension CreateViewController {
 }
 
 public extension CreateViewController where Model.IDValue == UUID {
+
     func afterCreate(req: Request, form: EditForm, model: Model) -> EventLoopFuture<Response> {
-        let response = req.redirect(to: model.id!.uuidString)
-        return req.eventLoop.makeSucceededFuture(response)
+        req.eventLoop.future(req.redirect(to: model.id!.uuidString))
     }
 }

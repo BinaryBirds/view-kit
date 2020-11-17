@@ -45,11 +45,7 @@ public extension DeleteViewController {
     }
 
     func afterDelete(req: Request, model: Model) -> EventLoopFuture<Response> {
-        let separator = "/"
-        let suffix = req.url.path.hasSuffix(separator) ? separator : ""
-        let newPath = separator + req.url.path.split(separator: Character(separator)).dropLast(2).joined(separator: separator) + suffix
-        let response = req.redirect(to: newPath)
-        return req.eventLoop.makeSucceededFuture(response)
+        req.eventLoop.future(Response(status: .ok, version: req.version))
     }
 }
 
