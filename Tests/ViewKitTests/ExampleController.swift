@@ -9,9 +9,11 @@ import Vapor
 import Fluent
 @testable import ViewKit
 
-final class ExampleController: AdminViewController {    
+final class ExampleController: AdminViewController {
+    
     var listView: String = ""
     var editView: String = ""
+    var deleteView: String = ""
     
     typealias Model = ExampleModel
     typealias EditForm = ExampleEditForm

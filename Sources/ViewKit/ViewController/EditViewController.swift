@@ -11,7 +11,7 @@ public protocol EditViewController: IdentifiableViewController {
 
     /// the name of the edit view template
     var editView: String { get }
-    
+
     var fileUploadLimit: ByteCount { get }
 
     /// this is called before the form rendering happens (used both in createView and updateView)
@@ -32,8 +32,16 @@ public extension EditViewController {
     }
 
     func render(req: Request, form: EditForm) -> EventLoopFuture<View> {
-        return beforeRender(req: req, form: form)
-            .flatMap { req.leaf.render(template: editView, context: ["edit": form.leafData]) }
+        let formId = UUID().uuidString
+        let nonce = req.generateNonce(for: "edit-form", id: formId)
+
+        return beforeRender(req: req, form: form).flatMap {
+                req.leaf.render(template: editView, context: [
+                    "formId": .string(formId),
+                    "formToken": .string(nonce),
+                    "fields": form.leafData
+                ])
+            }
     }
 
     func beforeInvalidRender(req: Request, form: EditForm) -> EventLoopFuture<EditForm> {

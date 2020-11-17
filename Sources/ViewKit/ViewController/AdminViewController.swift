@@ -24,6 +24,6 @@ public extension AdminViewController {
         setupListRoute(on: base)
         setupCreateRoutes(on: base, as: createPath)
         setupUpdateRoutes(on: base)
-        setupDeleteRoute(on: base, as: deletePath)
+        setupDeleteRoutes(on: base, as: deletePath)
     }
 }

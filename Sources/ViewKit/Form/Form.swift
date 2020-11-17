@@ -19,8 +19,7 @@ public protocol Form: AnyObject, LeafDataRepresentable {
 
     /// init a form using an incoming request
     init(req: Request) throws
-    
-    /// validates the form
+
     func validate(req: Request) -> EventLoopFuture<Bool>
     
     /// loads the form field values using the model
@@ -29,3 +28,4 @@ public protocol Form: AnyObject, LeafDataRepresentable {
     /// saves the form field values into the model
     func write(to: Model)
 }
+
