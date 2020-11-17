@@ -17,7 +17,7 @@ public extension Request {
     /// generates a nonce and saves it in the session storage for a given key and identifier
     func generateNonce(for type: String, id: String) -> String {
         let token = [UInt8].random(count: 32).base64
-        session.data[getNonceSessionKey(for: type, id: id)] = id
+        session.data[getNonceSessionKey(for: type, id: id)] = token
         return token
     }
 
