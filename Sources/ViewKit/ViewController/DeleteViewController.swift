@@ -27,6 +27,7 @@ public extension DeleteViewController {
     }
 
     func setupDeleteRoutes(on builder: RoutesBuilder, as pathComponent: PathComponent) {
+        builder.get(idPathComponent, pathComponent, use: deleteView)
         builder.post(idPathComponent, pathComponent, use: delete)
     }
 
