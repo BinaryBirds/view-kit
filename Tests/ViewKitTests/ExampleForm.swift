@@ -8,7 +8,7 @@
 import Vapor
 @testable import ViewKit
 
-final class ExampleEditForm: Form {
+final class ExampleEditForm: ModelForm {
 
     struct Input: Decodable {
         var id: String
@@ -16,7 +16,7 @@ final class ExampleEditForm: Form {
         var bar: String
     }
 
-    var id: String? = nil
+    var modelId: String? = nil
     var foo = StringFormField()
     var bar = StringFormField()
     
@@ -25,7 +25,7 @@ final class ExampleEditForm: Form {
     init(req: Request) throws {
         let context = try req.content.decode(Input.self)
         if !context.id.isEmpty {
-            id = context.id
+            modelId = context.id
         }
 
         foo.value = context.foo
@@ -38,7 +38,7 @@ final class ExampleEditForm: Form {
     }
     
     func read(from model: ExampleModel )  {
-        id = model.id!.uuidString
+        modelId = model.id!.uuidString
         foo.value = model.foo
         bar.value = String(model.foo)
     }
@@ -54,7 +54,7 @@ final class ExampleEditForm: Form {
     
     var leafData: LeafData {
         .dictionary([
-            "id": .string(id),
+            "id": .string(modelId),
             "foo": foo.leafData,
             "bar": bar.leafData,
         ])

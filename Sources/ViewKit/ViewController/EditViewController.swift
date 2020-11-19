@@ -7,7 +7,7 @@
 
 public protocol EditViewController: IdentifiableViewController {
     /// the associated edit form
-    associatedtype EditForm: Form
+    associatedtype EditForm: ModelForm
 
     /// the name of the edit view template
     var editView: String { get }

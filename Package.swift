@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "view-kit",
     platforms: [
-       .macOS(.v11)
+       .macOS(.v10_15)
     ],
     products: [
         .library(name: "ViewKit", targets: ["ViewKit"]),

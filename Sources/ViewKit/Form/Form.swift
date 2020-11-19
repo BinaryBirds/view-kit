@@ -7,12 +7,6 @@
 
 /// can be used to build forms
 public protocol Form: AnyObject, LeafDataRepresentable {
-
-    /// the associated model
-    associatedtype Model: Fluent.Model
-
-    /// raw string identifier of the associated model
-    var id: String? { get }
     
     /// init a form
     init()
@@ -21,11 +15,6 @@ public protocol Form: AnyObject, LeafDataRepresentable {
     init(req: Request) throws
 
     func validate(req: Request) -> EventLoopFuture<Bool>
-    
-    /// loads the form field values using the model
-    func read(from: Model)
-    
-    /// saves the form field values into the model
-    func write(to: Model)
 }
+
 

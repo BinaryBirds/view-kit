@@ -52,8 +52,7 @@ public extension DeleteViewController {
 public extension DeleteViewController where Model.IDValue == UUID {
 
     func delete(req: Request) throws -> EventLoopFuture<Response> {
-        let context = try req.content.decode(FormInput.self)
-        try req.useNonce(for: "delete-form", id: context.formId, token: context.formToken)
+        try req.validateFormToken(for: "delete-form")
 
         return try find(req)
             .flatMap { beforeDelete(req: req, model: $0) }

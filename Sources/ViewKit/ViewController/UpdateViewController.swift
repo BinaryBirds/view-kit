@@ -33,8 +33,7 @@ public extension UpdateViewController {
     }
     
     func update(req: Request) throws -> EventLoopFuture<Response> {
-        let context = try req.content.decode(FormInput.self)
-        try req.useNonce(for: "edit-form", id: context.formId, token: context.formToken)
+        try req.validateFormToken(for: "edit-form")
 
         let form = try EditForm(req: req)
         return form.validate(req: req).flatMap { isValid in

@@ -32,4 +32,9 @@ public extension Request {
             throw Abort(.forbidden)
         }
     }
+
+    func validateFormToken(for key: String) throws {
+        let context = try content.decode(FormInput.self)
+        try useNonce(for: key, id: context.formId, token: context.formToken)
+    }
 }
