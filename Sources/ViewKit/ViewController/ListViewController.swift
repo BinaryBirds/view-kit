@@ -29,6 +29,12 @@ public protocol ListViewController: ViewController {
 
     /// builds the query in order to list objects in the admin interface
     func beforeList(req: Request, queryBuilder: QueryBuilder<Model>) throws -> QueryBuilder<Model>
+    
+    /// implement this method if you want to alter the sort or order function for a given field (e.g order by a joined field)
+    func beforeList(req: Request, order: FieldKey, sort: Sort, queryBuilder qb: QueryBuilder<Model>) -> QueryBuilder<Model>
+
+    /// this method is used before a page object gets rendered, you can alter the returned LeafData as needed
+    func beforeListRender(page: Page<Model>) -> LeafData
  
     /// search
     func search(using: QueryBuilder<Model>, for: String)
@@ -58,10 +64,18 @@ public extension ListViewController {
         queryBuilder
     }
 
+    func beforeList(req: Request, order: FieldKey, sort: Sort, queryBuilder qb: QueryBuilder<Model>) -> QueryBuilder<Model> {
+        qb.sort(order, sort.direction)
+    }
+
+    func beforeListRender(page: Page<Model>) -> LeafData {
+        page.leafData
+    }
+
     func listView(req: Request) throws -> EventLoopFuture<View> {
         /// first we need a QueryBuilder instance, we apply the beforeList method on the default query
         var qb = try beforeList(req: req, queryBuilder: Model.query(on: req.db))
-
+                
         /// next we get the sort from the query, if there was no sort key we use the default sort
         var sort = listDefaultSort
         if let sortQuery: String = req.query[listSortKey], let sortValue = Sort(rawValue: sortQuery) {
@@ -74,7 +88,7 @@ public extension ListViewController {
             let order = FieldKey(stringLiteral: orderValue)
             /// only allow ordering if the order value is in the allowed orders array
             if listAllowedOrders.contains(order) {
-                qb = qb.sort(order, sort.direction)
+                qb = beforeList(req: req, order: order, sort: sort, queryBuilder: qb)
             }
         }
 
@@ -102,8 +116,8 @@ public extension ListViewController {
             return Page(models, info: .init(current: page, limit: limit, total: totalPages))
         }
         /// map the page elements to Leaf values & render the list view
-        .map { $0.map(\.leafData) }
-        .flatMap { req.leaf.render(template: listView, context: ["list": $0.leafData]) }
+        .map { beforeListRender(page: $0) }
+        .flatMap { req.leaf.render(template: listView, context: ["list": $0]) }
     }
 
     func setupListRoute(on builder: RoutesBuilder) {
