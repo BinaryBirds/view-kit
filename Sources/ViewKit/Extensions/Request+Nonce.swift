@@ -5,8 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 11. 17..
 //
 
-import Vapor
-
 public extension Request {
 
     /// returns a nonce session key for a given type and identifier

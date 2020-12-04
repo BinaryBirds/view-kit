@@ -1,11 +1,11 @@
 //
-//  File.swift
-//  
+//  ListSort.swift
+//  ViewKit
 //
 //  Created by Tibor Bodecs on 2020. 10. 19..
 //
 
-public enum Sort: String, CaseIterable {
+public enum ListSort: String, CaseIterable {
     case asc
     case desc
     

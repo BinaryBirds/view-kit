@@ -5,10 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 04. 27..
 //
 
-import Vapor
-import Fluent
-import Leaf
-@testable import ViewKit
+import ViewKit
 
 final class ExampleModel: Model {
 
@@ -22,7 +19,7 @@ final class ExampleModel: Model {
     @ID() var id: UUID?
     @Field(key: FieldKeys.foo) var foo: String
     @Field(key: FieldKeys.bar) var bar: Int
-    
+
     init() { }
     
     init(id: UUID? = nil, foo: String, bar: Int) {
@@ -36,9 +33,9 @@ extension ExampleModel: LeafDataRepresentable {
 
     var leafData: LeafData {
         .dictionary([
-            "id": .string(id?.uuidString),
-            "foo": .string(foo),
-            "bar": .int(bar),
+            "id": id,
+            "foo": foo,
+            "bar": bar,
         ])
     }
     

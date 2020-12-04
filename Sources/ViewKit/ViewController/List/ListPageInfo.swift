@@ -1,12 +1,12 @@
 //
-//  PageInfo.swift
+//  ListPageInfo.swift
 //  ViewKit
 //
 //  Created by Tibor Bodecs on 2020. 10. 18..
 //
 
 /// pagination metadata info
-public struct PageInfo: LeafDataRepresentable {
+public struct ListPageInfo: LeafDataRepresentable {
 
     /// current page
     public let current: Int

@@ -5,58 +5,53 @@
 //  Created by Tibor Bodecs on 2020. 04. 27..
 //
 
-import Vapor
-@testable import ViewKit
+import ViewKit
 
 final class ExampleEditForm: ModelForm {
 
+    typealias Model = ExampleModel
+
     struct Input: Decodable {
-        var id: String
+        var id: UUID?
         var foo: String
-        var bar: String
+        var bar: Int
     }
 
-    var modelId: String? = nil
-    var foo = StringFormField()
-    var bar = StringFormField()
-    
+    // MARK: - properties
+    var modelId: Model.IDValue? = nil
+    var foo = FormField<String>(key: "foo", value: "")
+        .required()
+        .length(max: 250)
+
+    var bar = FormField<Int>(key: "bar", value: 0)
+        .min(300)
+        .max(900)
+
+    /// list fields
+    func fields() -> [FormFieldInterface] {
+        [foo, bar]
+    }
+
+    // MARK: - methods
+
     init() {}
     
     init(req: Request) throws {
         let context = try req.content.decode(Input.self)
-        if !context.id.isEmpty {
-            modelId = context.id
-        }
-
+        modelId = context.id
         foo.value = context.foo
         bar.value = context.bar
     }
     
-    func write(to model: ExampleModel) {
-        model.foo = foo.value
-        model.bar = Int(bar.value)!
-    }
-    
     func read(from model: ExampleModel )  {
-        modelId = model.id!.uuidString
+        modelId = model.id
         foo.value = model.foo
-        bar.value = String(model.foo)
+        bar.value = model.bar
     }
 
-    func validate(req: Request) -> EventLoopFuture<Bool> {
-        var valid = true
-        if Int(bar.value) == nil {
-            bar.error = "Bar is not an integer"
-            valid = false
-        }
-        return req.eventLoop.future(valid)
-    }
-    
-    var leafData: LeafData {
-        .dictionary([
-            "id": .string(modelId),
-            "foo": foo.leafData,
-            "bar": bar.leafData,
-        ])
+    func write(to model: ExampleModel) {
+        model.foo = foo.value
+        model.bar = bar.value
     }
 }
+

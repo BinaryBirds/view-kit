@@ -6,32 +6,32 @@
 //
 
 /// various form field options for common use-cases
-public extension FormFieldStringOption {
+public extension FormFieldOption {
 
     /// constructs a new set of yes and no options
-    static func yesNo() -> [FormFieldStringOption] {
+    static func yesNo() -> [FormFieldOption] {
         ["yes", "no"].map { .init(key: $0, label: $0.capitalized) }
     }
 
     /// constructs a new set of boolean options
-    static func trueFalse() -> [FormFieldStringOption] {
+    static func trueFalse() -> [FormFieldOption] {
         [true, false].map { .init(key: String($0), label: String($0).capitalized) }
     }
     
     /// constructs a new set of options based on the given integer numbers
-    static func numbers(_ numbers: [Int]) -> [FormFieldStringOption] {
+    static func numbers(_ numbers: [Int]) -> [FormFieldOption] {
         numbers.map { .init(key: String($0), label: String($0)) }
     }
     
     /// available locales
-    static var locales: [FormFieldStringOption] {
+    static var locales: [FormFieldOption] {
         Locale.availableIdentifiers
             .map { .init(key: $0, label: Locale.autoupdatingCurrent.localizedString(forIdentifier: $0) ?? $0) }
             .sorted(by: { $0.label < $1.label })
     }
 
     /// NOTE: experimental gmt timezones
-    static var gmtTimezones: [FormFieldStringOption] {
+    static var gmtTimezones: [FormFieldOption] {
         TimeZone.knownTimeZoneIdentifiers
             .compactMap { TimeZone.init(identifier: $0) }
             .sorted(by: { $0.secondsFromGMT() < $1.secondsFromGMT() })
@@ -52,7 +52,7 @@ public extension FormFieldStringOption {
     }
     
     /// NOTE: experimental unique timezones (with most popular locations)
-    static var uniqueTimeZones: [FormFieldStringOption] {
+    static var uniqueTimeZones: [FormFieldOption] {
         return [
             "Pacific/Pago_Pago": "GMT-11:00 - Midway Island, Samoa",
             "Pacific/Honolulu": "GMT-10:00 - Hawaii",
