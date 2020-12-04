@@ -15,7 +15,7 @@ public protocol FormInterface: LeafDataRepresentable {
 /// can be used to build forms
 open class Form: FormInterface {
     
-    var notification: String?
+    open var notification: String?
 
     open var leafData: LeafData {
         var dict = fields().reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData }
