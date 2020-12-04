@@ -19,7 +19,7 @@ open class ModelForm<Model: Fluent.Model>: Form, ModelFormInterface {
     
     open override var leafData: LeafData {
         var dict = super.leafData.dictionary!
-        dict["id"] = modelId?.encodeToLeafData()
+        dict["modelId"] = modelId?.encodeToLeafData()
         return .dictionary(dict)
     }
 
