@@ -8,7 +8,7 @@
 import ViewKit
 
 final class ExampleController: AdminViewController {
-
+    
     var getView: String = ""
     var listView: String = ""
     var createView: String = ""
@@ -16,8 +16,9 @@ final class ExampleController: AdminViewController {
     var deleteView: String = ""
     
     typealias Model = ExampleModel
-    typealias CreateForm = ExampleEditForm
-    typealias UpdateForm = ExampleEditForm
+    
+    typealias CreateForm = ModelForm<ExampleModel>
+    typealias UpdateForm = ModelForm<ExampleModel>
     
     func find(_ req: Request) throws -> EventLoopFuture<Model> {
         req.eventLoop.future(ExampleModel(id: UUID(), foo: "foo", bar: 1))

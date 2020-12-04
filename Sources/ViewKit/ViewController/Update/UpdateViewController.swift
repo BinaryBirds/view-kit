@@ -7,7 +7,7 @@
 
 public protocol UpdateViewController: IdentifiableViewController {
     
-    associatedtype UpdateForm: ModelForm
+    associatedtype UpdateForm: ModelFormInterface
 
     /// the name of the update view template
     var updateView: String { get }

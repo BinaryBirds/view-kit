@@ -5,27 +5,41 @@
 //  Created by Tibor Bodecs on 2020. 11. 19..
 //
 
-/// can be used to build forms with associated models
-public protocol ModelForm: Form {
-
-    /// the associated model
+public protocol ModelFormInterface: FormInterface {
+    
     associatedtype Model: Fluent.Model
-    
-    /// raw string identifier of the associated model
-    var modelId: Model.IDValue? { get }
 
-    /// loads the form field values using the model
+    var modelId: Model.IDValue? { get set }
     func read(from: Model)
-    
-    /// saves the form field values into the model
     func write(to: Model)
 }
 
-public extension ModelForm {
-
-    var leafData: LeafData {
-        var dict = fields().reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData }
+/// can be used to build forms with associated models
+open class ModelForm<Model: Fluent.Model>: Form, ModelFormInterface {
+    
+    open override var leafData: LeafData {
+        var dict = super.leafData.dictionary!
         dict["id"] = modelId?.encodeToLeafData()
         return .dictionary(dict)
+    }
+
+    public required init() {
+        super.init()
+    }
+
+    public required init(req: Request) throws {
+        try super.init(req: req)
+    }
+    /// raw string identifier of the associated model
+    open var modelId: Model.IDValue?
+
+    /// loads the form field values using the model
+    open func read(from: Model) {
+        
+    }
+    
+    /// saves the form field values into the model
+    open func write(to: Model) {
+        
     }
 }

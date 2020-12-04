@@ -7,7 +7,7 @@
 
 public protocol CreateViewController: ViewController {
 
-    associatedtype CreateForm: ModelForm
+    associatedtype CreateForm: ModelFormInterface
 
     /// the name of the edit view template
     var createView: String { get }
@@ -39,3 +39,4 @@ public protocol CreateViewController: ViewController {
     /// setup the get and post create routes using the given builder
     func setupCreateRoutes(on: RoutesBuilder, as: PathComponent)
 }
+

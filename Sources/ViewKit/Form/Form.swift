@@ -5,34 +5,35 @@
 //  Created by Tibor Bodecs on 2020. 04. 22..
 //
 
-/// can be used to build forms
-public protocol Form: AnyObject, LeafDataRepresentable {
-
-    /// init a form
+public protocol FormInterface: LeafDataRepresentable {
     init()
-
-    /// init a form using an incoming request
     init(req: Request) throws
     
-    /// returns the array of form fields
-    func fields() -> [FormFieldInterface]
-
-    /// validates the form fields
-    func validateFields() -> Bool
-    
-    /// validates an incoming request  after form submission
     func validate(req: Request) -> EventLoopFuture<Bool>
 }
 
-public extension Form {
+/// can be used to build forms
+open class Form: FormInterface {
+    
+    var notification: String?
 
-    var leafData: LeafData {
-        .dictionary(fields().reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData })
+    open var leafData: LeafData {
+        var dict = fields().reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData }
+        dict["notification"] = .string(notification)
+        return .dictionary(dict)
     }
 
-    func fields() -> [FormFieldInterface] { [] }
+    /// init a form
+    public required init() {}
 
-    func validateFields() -> Bool {
+    /// init a form using an incoming request
+    public required init(req: Request) throws {}
+
+    open func fields() -> [FormFieldInterface] {
+        []
+    }
+
+    open func validateFields() -> Bool {
         var isValid = true
         for field in fields() {
             let isFieldValid = field.validate()
@@ -41,7 +42,7 @@ public extension Form {
         return isValid
     }
 
-    func validate(req: Request) -> EventLoopFuture<Bool> {
+    open func validate(req: Request) -> EventLoopFuture<Bool> {
         req.eventLoop.future(validateFields())
     }
 }
