@@ -14,9 +14,13 @@ public protocol Form: AnyObject, LeafDataRepresentable {
     /// init a form using an incoming request
     init(req: Request) throws
     
+    /// returns the array of form fields
     func fields() -> [FormFieldInterface]
 
+    /// validates the form fields
     func validateFields() -> Bool
+    
+    /// validates an incoming request  after form submission
     func validate(req: Request) -> EventLoopFuture<Bool>
 }
 
@@ -31,7 +35,7 @@ public extension Form {
     func validateFields() -> Bool {
         var isValid = true
         for field in fields() {
-            var isFieldValid = field.validate()
+            let isFieldValid = field.validate()
             isValid = isValid && isFieldValid
         }
         return isValid

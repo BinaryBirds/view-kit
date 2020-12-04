@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  ExampleEditForm.swift
+//  ViewKitTests
 //
 //  Created by Tibor Bodecs on 2020. 04. 27..
 //
@@ -19,13 +19,8 @@ final class ExampleEditForm: ModelForm {
 
     // MARK: - properties
     var modelId: Model.IDValue? = nil
-    var foo = FormField<String>(key: "foo", value: "")
-        .required()
-        .length(max: 250)
-
-    var bar = FormField<Int>(key: "bar", value: 0)
-        .min(300)
-        .max(900)
+    var foo = FormField<String>(key: "foo").required().length(max: 250)
+    var bar = FormField<Int>(key: "bar").min(300).max(900)
 
     /// list fields
     func fields() -> [FormFieldInterface] {
@@ -50,8 +45,8 @@ final class ExampleEditForm: ModelForm {
     }
 
     func write(to model: ExampleModel) {
-        model.foo = foo.value
-        model.bar = bar.value
+        model.foo = foo.value!
+        model.bar = bar.value!
     }
 }
 

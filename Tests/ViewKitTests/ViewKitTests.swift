@@ -1,9 +1,16 @@
+//
+//  ViewKitTests.swift
+//  ViewKitTests
+//
+//  Created by Tibor Bodecs on 2020. 04. 27..
+//
+
 import XCTest
 import ViewKit
 
 final class ViewKitTests: XCTestCase {
     
-    func testExample() throws {
+    func testFormView() throws {
         let app = Application(.testing)
         defer { app.shutdown() }
 

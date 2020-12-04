@@ -5,13 +5,6 @@
 //  Created by Tibor Bodecs on 2020. 04. 23..
 //
 
-public protocol FormFieldInterface: LeafDataRepresentable {
-    var key: String { get }
-    func validate() -> Bool
-}
-
-
-
 /// a base protocol for all the form fileds
 open class FormField<Value: LeafDataRepresentable>: FormFieldInterface {
 
@@ -19,7 +12,7 @@ open class FormField<Value: LeafDataRepresentable>: FormFieldInterface {
     public var key: String
 
     /// value of the form field
-    public var value: Value
+    public var value: Value?
 
     /// name of the form field
     public var name: String?
@@ -27,13 +20,14 @@ open class FormField<Value: LeafDataRepresentable>: FormFieldInterface {
     /// options
     public var options: [FormFieldOption]
     
+    /// array of validators
     public var validators: [(FormField<Value>) -> Bool]
 
     /// error message
     public var error: String?
 
     public init(key: String,
-                value: Value,
+                value: Value? = nil,
                 options: [FormFieldOption] = [],
                 name: String? = nil,
                 validators: [(FormField<Value>) -> Bool] = [],
@@ -47,6 +41,7 @@ open class FormField<Value: LeafDataRepresentable>: FormFieldInterface {
         self.error = error
     }
 
+    /// leaf data representation of the form field
     open var leafData: LeafData {
         .dictionary([
             "key": key,
@@ -57,6 +52,7 @@ open class FormField<Value: LeafDataRepresentable>: FormFieldInterface {
         ])
     }
 
+    /// validates a form field
     open func validate() -> Bool {
         /// clean previous error messages
         error = nil

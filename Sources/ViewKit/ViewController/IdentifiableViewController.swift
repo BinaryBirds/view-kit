@@ -14,7 +14,7 @@ public protocol IdentifiableViewController: ViewController {
     var idPathComponent: PathComponent { get }
     
     /// finds and unwraps a model based on the identifier key
-    func find(_ req: Request) throws -> EventLoopFuture<Model>
+    func find(_: Request) throws -> EventLoopFuture<Model>
 }
 
 public extension IdentifiableViewController {

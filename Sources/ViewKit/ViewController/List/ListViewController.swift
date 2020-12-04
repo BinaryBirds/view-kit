@@ -41,10 +41,10 @@ public protocol ListViewController: ViewController {
     func beforeListQuery(req: Request, queryBuilder: QueryBuilder<Model>) -> QueryBuilder<Model>
     
     /// implement this method if you want to alter the sort or order function for a given field (e.g order by a joined field)
-    func listQuery(order: FieldKey, sort: ListSort, queryBuilder qb: QueryBuilder<Model>, req: Request) -> QueryBuilder<Model>
+    func listQuery(order: FieldKey, sort: ListSort, queryBuilder: QueryBuilder<Model>, req: Request) -> QueryBuilder<Model>
     
     /// search
-    func listQuery(search: String, queryBuilder qb: QueryBuilder<Model>, req: Request)
+    func listQuery(search: String, queryBuilder: QueryBuilder<Model>, req: Request)
     
     /// this method is used before a page object gets rendered, you can alter the returned LeafData as needed
     func beforeListPageRender(page: ListPage<Model>) -> LeafData

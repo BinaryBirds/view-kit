@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  ExampleController.swift
+//  ViewKitTests
 //
 //  Created by Tibor Bodecs on 2020. 04. 27..
 //
