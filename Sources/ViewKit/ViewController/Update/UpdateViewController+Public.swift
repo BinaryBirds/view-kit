@@ -80,8 +80,8 @@ public extension UpdateViewController {
         renderUpdateForm(req: req, form: form).encodeResponse(for: req)
     }
 
-    func setupUpdateRoutes(on builder: RoutesBuilder) {
-        builder.get(idPathComponent, use: updateView)
-        builder.on(.POST, idPathComponent, use: update)
+    func setupUpdateRoutes(on builder: RoutesBuilder, as pathComponent: PathComponent) {
+        builder.get(idPathComponent, pathComponent, use: updateView)
+        builder.on(.POST, idPathComponent, pathComponent, use: update)
     }
 }

@@ -37,5 +37,5 @@ public protocol UpdateViewController: IdentifiableViewController {
     func afterUpdate(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Response>
     
     /// setup update routes using the route builder
-    func setupUpdateRoutes(on: RoutesBuilder)
+    func setupUpdateRoutes(on builder: RoutesBuilder, as: PathComponent)
 }
