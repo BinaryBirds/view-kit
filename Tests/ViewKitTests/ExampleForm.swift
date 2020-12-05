@@ -23,7 +23,7 @@ final class ExampleEditForm: ModelForm {
     var bar = FormField<Int>(key: "bar").min(300).max(900)
     var notification: String?
 
-    var fields: [FormFieldInterface] {
+    var fields: [AbstractFormField] {
         [foo, bar]
     }
 

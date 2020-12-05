@@ -7,7 +7,7 @@
 
 public protocol Form: AnyObject, LeafDataRepresentable {
 
-    var fields: [FormFieldInterface] { get }
+    var fields: [AbstractFormField] { get }
     var fieldsLeafData: LeafData { get }
     var notification: String? { get set }
 
@@ -20,7 +20,7 @@ public protocol Form: AnyObject, LeafDataRepresentable {
 
 public extension Form {
     
-    var fields: [FormFieldInterface] { [] }
+    var fields: [AbstractFormField] { [] }
 
     var fieldsLeafData: LeafData {
         .dictionary(fields.reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData })
