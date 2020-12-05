@@ -57,6 +57,7 @@ public extension CreateViewController {
 
             let form = CreateForm()
             return form.initialize(req: req)
+                .throwingFlatMap { try form.processInput(req: req) }
                 .flatMap { form.validate(req: req) }
                 .flatMap { isValid in
                     guard isValid else {
