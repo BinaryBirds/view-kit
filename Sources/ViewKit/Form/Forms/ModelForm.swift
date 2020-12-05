@@ -13,6 +13,8 @@ public protocol ModelForm: Form {
 
     func read(from: Model)
     func write(to: Model)
+
+    func didSave(req: Request, model: Model) -> EventLoopFuture<Void>
 }
 
 /// can be used to build forms with associated models
@@ -23,5 +25,9 @@ public extension ModelForm {
         dict["modelId"] = modelId?.encodeToLeafData()
         dict["notification"] = .string(notification)
         return .dictionary(dict)
+    }
+    
+    func didSave(req: Request, model: Model) -> EventLoopFuture<Void> {
+        req.eventLoop.future()
     }
 }

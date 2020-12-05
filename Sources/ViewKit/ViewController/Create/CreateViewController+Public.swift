@@ -65,9 +65,10 @@ public extension CreateViewController {
      write the form content to the model
      before create we can still alter the model
      create
-     save form
+     call didSave model
      after create we can alter the model
      read the form with using new model
+     call save form
      createResponse (render the form)
      */
     func create(req: Request) throws -> EventLoopFuture<Response> {
@@ -91,10 +92,11 @@ public extension CreateViewController {
                     form.write(to: model as! CreateForm.Model)
 
                     return beforeCreate(req: req, model: model, form: form)
-                        .flatMap { $0.create(on: req.db) }
-                        .flatMap { form.save(req: req) }
-                        .flatMap { afterCreate(req: req, form: form, model: model) }
-                        .map { form.read(from: $0 as! CreateForm.Model); return $0; }
+                        .flatMap { model in model.create(on: req.db).map { model } }
+                        .flatMap { model in form.didSave(req: req, model: model as! CreateForm.Model ).map { model } }
+                        .flatMap { afterCreate(req: req, form: form, model: $0) }
+                        .map { model in form.read(from: model as! CreateForm.Model); return model; }
+                        .flatMap { model in form.save(req: req).map { model } }
                         .flatMap { createResponse(req: req, form: form, model: $0) }
             }
         }
