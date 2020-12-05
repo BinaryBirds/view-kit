@@ -37,7 +37,10 @@ public extension CreateViewController {
             guard hasAccess else {
                 return req.eventLoop.future(error: Abort(.forbidden))
             }
-            return renderCreateForm(req: req, form: .init())
+            let form = CreateForm()
+            return form.initialize(req: req).flatMap {
+                renderCreateForm(req: req, form: form)
+            }
         }
     }
 

@@ -39,8 +39,10 @@ public extension UpdateViewController {
             }
             return try find(req).flatMap { model in
                 let form = UpdateForm()
-                form.read(from: model as! UpdateForm.Model)
-                return renderUpdateForm(req: req, form: form)
+                return form.initialize(req: req).flatMap {
+                    form.read(from: model as! UpdateForm.Model)
+                    return renderUpdateForm(req: req, form: form)
+                }
             }
         }
     }
