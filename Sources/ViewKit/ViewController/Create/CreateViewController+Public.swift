@@ -72,7 +72,10 @@ public extension CreateViewController {
                             return model.create(on: req.db).map { model }
                                 .flatMap { model in
                                     form.read(from: model as! CreateForm.Model)
-                                    return afterCreate(req: req, form: form, model: model)
+                                    return form.save(req: req)
+                                }
+                                .flatMap {
+                                    afterCreate(req: req, form: form, model: model)
                                 }
                         }
             }

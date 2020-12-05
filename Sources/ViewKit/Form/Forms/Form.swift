@@ -16,6 +16,7 @@ public protocol Form: AnyObject, LeafDataRepresentable {
     func initialize(req: Request) -> EventLoopFuture<Void>
     func processInput(req: Request) throws -> EventLoopFuture<Void>
     func validate(req: Request) -> EventLoopFuture<Bool>
+    func save(req: Request) -> EventLoopFuture<Void>
 }
 
 public extension Form {
@@ -51,5 +52,9 @@ public extension Form {
     
     func validate(req: Request) -> EventLoopFuture<Bool> {
         req.eventLoop.future(validateFields())
+    }
+    
+    func save(req: Request) -> EventLoopFuture<Void> {
+        req.eventLoop.future()
     }
 }

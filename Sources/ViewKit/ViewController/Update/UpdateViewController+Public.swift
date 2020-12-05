@@ -75,7 +75,10 @@ public extension UpdateViewController {
                         }
                         .flatMap { model in
                             form.read(from: model as! UpdateForm.Model)
-                            return afterUpdate(req: req, form: form, model: model)
+                            return form.save(req: req).map { model }
+                        }
+                        .flatMap { model in 
+                            afterUpdate(req: req, form: form, model: model)
                         }
                 }
         }
