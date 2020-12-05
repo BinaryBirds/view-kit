@@ -27,9 +27,6 @@ open class ModelForm<Model: Fluent.Model>: Form, ModelFormInterface {
         super.init()
     }
 
-    public required init(req: Request) throws {
-        try super.init(req: req)
-    }
     /// raw string identifier of the associated model
     open var modelId: Model.IDValue?
 

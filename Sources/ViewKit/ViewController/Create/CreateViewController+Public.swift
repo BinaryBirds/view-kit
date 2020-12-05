@@ -52,23 +52,25 @@ public extension CreateViewController {
             }
             try req.validateFormToken(for: "create-form")
 
-            let form = try CreateForm(req: req)
-            return form.validate(req: req).flatMap { isValid in
-                guard isValid else {
-                    return beforeInvalidCreateFormRender(req: req, form: form).flatMap {
-                        renderCreateForm(req: req, form: $0).encodeResponse(for: req)
+            let form = CreateForm()
+            return try form.initialize(req: req)
+                .flatMap { form.validate(req: req) }
+                .flatMap { isValid in
+                    guard isValid else {
+                        return beforeInvalidCreateFormRender(req: req, form: form).flatMap {
+                            renderCreateForm(req: req, form: $0).encodeResponse(for: req)
+                        }
                     }
-                }
-                let model = Model()
-                return beforeCreate(req: req, model: model, form: form)
-                    .flatMap { model in
-                        form.write(to: model as! CreateForm.Model)
-                        return model.create(on: req.db).map { model }
-                    .flatMap { model in
-                        form.read(from: model as! CreateForm.Model)
-                        return afterCreate(req: req, form: form, model: model)
-                    }
-                }
+                    let model = Model()
+                    return beforeCreate(req: req, model: model, form: form)
+                        .flatMap { model in
+                            form.write(to: model as! CreateForm.Model)
+                            return model.create(on: req.db).map { model }
+                                .flatMap { model in
+                                    form.read(from: model as! CreateForm.Model)
+                                    return afterCreate(req: req, form: form, model: model)
+                                }
+                        }
             }
         }
     }

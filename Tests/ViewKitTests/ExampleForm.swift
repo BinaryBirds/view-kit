@@ -30,13 +30,13 @@ final class ExampleEditForm: ModelForm<ExampleModel> {
         super.init()
     }
 
-    required init(req: Request) throws {
-        try super.init(req: req)
-
+    override func initialize(req: Request) throws -> EventLoopFuture<Void> {
         let context = try req.content.decode(Input.self)
         modelId = context.id
         foo.value = context.foo
         bar.value = context.bar
+        
+        return try super.initialize(req: req)
     }
     
     override func read(from model: ExampleModel )  {

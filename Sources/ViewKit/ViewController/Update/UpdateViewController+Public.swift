@@ -56,23 +56,25 @@ public extension UpdateViewController {
             }
             try req.validateFormToken(for: "update-form")
 
-            let form = try UpdateForm(req: req)
-            return form.validate(req: req).throwingFlatMap { isValid in
-                guard isValid else {
-                    return beforeInvalidUpdateFormRender(req: req, form: form)
-                        .flatMap { renderUpdateForm(req: req, form: $0).encodeResponse(for: req) }
+            let form = UpdateForm()
+            return try form.initialize(req: req)
+                .flatMap { form.validate(req: req) }
+                .throwingFlatMap { isValid in
+                    guard isValid else {
+                        return beforeInvalidUpdateFormRender(req: req, form: form)
+                            .flatMap { renderUpdateForm(req: req, form: $0).encodeResponse(for: req) }
+                    }
+                    return try find(req)
+                        .flatMap { beforeUpdate(req: req, model: $0, form: form) }
+                        .flatMap { model -> EventLoopFuture<Model> in
+                            form.write(to: model as! UpdateForm.Model)
+                            return model.update(on: req.db).map { model }
+                        }
+                        .flatMap { model in
+                            form.read(from: model as! UpdateForm.Model)
+                            return afterUpdate(req: req, form: form, model: model)
+                        }
                 }
-                return try find(req)
-                    .flatMap { beforeUpdate(req: req, model: $0, form: form) }
-                    .flatMap { model -> EventLoopFuture<Model> in
-                        form.write(to: model as! UpdateForm.Model)
-                        return model.update(on: req.db).map { model }
-                    }
-                    .flatMap { model in
-                        form.read(from: model as! UpdateForm.Model)
-                        return afterUpdate(req: req, form: form, model: model)
-                    }
-            }
         }
     }
 

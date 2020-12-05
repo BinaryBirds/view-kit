@@ -7,30 +7,36 @@
 
 public protocol FormInterface: LeafDataRepresentable {
     init()
-    init(req: Request) throws
-    
+
+    func initialize(req: Request) throws -> EventLoopFuture<Void>
+    func processInput(req: Request) throws -> EventLoopFuture<Void>
     func validate(req: Request) -> EventLoopFuture<Bool>
 }
 
 /// can be used to build forms
 open class Form: FormInterface {
-    
-    open var notification: String?
+  
+    open var message: String?
 
     open var leafData: LeafData {
         var dict = fields().reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData }
-        dict["notification"] = .string(notification)
+        dict["message"] = .string(message)
         return .dictionary(dict)
     }
 
     /// init a form
     public required init() {}
 
-    /// init a form using an incoming request
-    public required init(req: Request) throws {}
-
     open func fields() -> [FormFieldInterface] {
         []
+    }
+
+    open func initialize(req: Request) throws -> EventLoopFuture<Void> {
+        req.eventLoop.future()
+    }
+    
+    open func processInput(req: Request) throws -> EventLoopFuture<Void> {
+        req.eventLoop.future()
     }
 
     open func validateFields() -> Bool {
