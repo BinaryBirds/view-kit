@@ -7,7 +7,9 @@
 
 import ViewKit
 
-final class ExampleEditForm: ModelForm<ExampleModel> {
+final class ExampleEditForm: ModelForm {
+
+    typealias Model = ExampleModel
 
     struct Input: Decodable {
         var id: UUID?
@@ -16,36 +18,35 @@ final class ExampleEditForm: ModelForm<ExampleModel> {
     }
 
     // MARK: - properties
+    var modelId: UUID?
     var foo = FormField<String>(key: "foo").required().length(max: 250)
     var bar = FormField<Int>(key: "bar").min(300).max(900)
+    var notification: String?
 
-    /// list fields
-    override func fields() -> [FormFieldInterface] {
+    var fields: [FormFieldInterface] {
         [foo, bar]
     }
 
     // MARK: - methods
 
-    required init() {
-        super.init()
-    }
+    init() {}
 
-    override func initialize(req: Request) throws -> EventLoopFuture<Void> {
+    func processInput(req: Request) throws -> EventLoopFuture<Void> {
         let context = try req.content.decode(Input.self)
         modelId = context.id
         foo.value = context.foo
         bar.value = context.bar
-        
-        return try super.initialize(req: req)
+
+        return req.eventLoop.future()
     }
     
-    override func read(from model: ExampleModel )  {
+    func read(from model: ExampleModel )  {
         modelId = model.id
         foo.value = model.foo
         bar.value = model.bar
     }
 
-    override func write(to model: ExampleModel) {
+    func write(to model: ExampleModel) {
         model.foo = foo.value!
         model.bar = bar.value!
     }

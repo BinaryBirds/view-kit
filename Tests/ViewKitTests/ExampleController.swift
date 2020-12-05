@@ -17,8 +17,8 @@ final class ExampleController: AdminViewController {
     
     typealias Model = ExampleModel
     
-    typealias CreateForm = ModelForm<ExampleModel>
-    typealias UpdateForm = ModelForm<ExampleModel>
+    typealias CreateForm = ExampleEditForm
+    typealias UpdateForm = ExampleEditForm
     
     func find(_ req: Request) throws -> EventLoopFuture<Model> {
         req.eventLoop.future(ExampleModel(id: UUID(), foo: "foo", bar: 1))

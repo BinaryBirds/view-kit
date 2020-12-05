@@ -57,7 +57,7 @@ public extension UpdateViewController {
             try req.validateFormToken(for: "update-form")
 
             let form = UpdateForm()
-            return try form.initialize(req: req)
+            return form.initialize(req: req)
                 .flatMap { form.validate(req: req) }
                 .throwingFlatMap { isValid in
                     guard isValid else {

@@ -7,7 +7,7 @@
 
 public protocol CreateViewController: ViewController {
 
-    associatedtype CreateForm: ModelFormInterface
+    associatedtype CreateForm: ModelForm
 
     /// the name of the edit view template
     var createView: String { get }

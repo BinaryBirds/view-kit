@@ -25,7 +25,7 @@ final class ViewKitTests: XCTestCase {
         let form = ExampleEditForm()
         form.modelId = uuid
         let data = form.leafData
-        XCTAssertEqual(data.dictionary?["id"], uuid.leafData)
+        XCTAssertEqual(data.dictionary?["modelId"], uuid.leafData)
     }
     
     func testFormValidation() throws {

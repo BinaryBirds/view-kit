@@ -53,7 +53,7 @@ public extension CreateViewController {
             try req.validateFormToken(for: "create-form")
 
             let form = CreateForm()
-            return try form.initialize(req: req)
+            return form.initialize(req: req)
                 .flatMap { form.validate(req: req) }
                 .flatMap { isValid in
                     guard isValid else {
