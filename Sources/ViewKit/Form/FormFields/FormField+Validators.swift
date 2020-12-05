@@ -58,7 +58,7 @@ public extension FormField where Value == String {
     
     func email(message: String? = nil) -> Self {
         validators.append({ [unowned self] field -> Bool in
-            if field.value == nil || !Validator.email.validate(field.value!).isFailure {
+            if field.value == nil || Validator.email.validate(field.value!).isFailure {
                 let message = message ?? "\(name ?? key.capitalized) should be a valid email address"
                 field.error = message
                 return false
