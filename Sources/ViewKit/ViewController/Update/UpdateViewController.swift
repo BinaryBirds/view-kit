@@ -34,7 +34,10 @@ public protocol UpdateViewController: IdentifiableViewController {
     func update(req: Request) throws -> EventLoopFuture<Response>
     
     /// runs after the model was updated
-    func afterUpdate(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Response>
+    func afterUpdate(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Model>
+
+    /// returns a response after the update flow
+    func updateResponse(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Response>
     
     /// setup update routes using the route builder
     func setupUpdateRoutes(on builder: RoutesBuilder, as: PathComponent)

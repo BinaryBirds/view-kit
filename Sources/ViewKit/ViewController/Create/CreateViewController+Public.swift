@@ -48,6 +48,28 @@ public extension CreateViewController {
         req.eventLoop.future(model)
     }
     
+    /*
+     FLOW:
+     ----
+     check access
+     validate incoming from with token
+     create form
+     initialize form
+     process input form
+     validate form
+     if invalid:
+        -> before invalid render we can still alter the form!
+        -> render
+     else:
+     create / find the model
+     write the form content to the model
+     before create we can still alter the model
+     create
+     save form
+     after create we can alter the model
+     read the form with using new model
+     createResponse (render the form)
+     */
     func create(req: Request) throws -> EventLoopFuture<Response> {
         accessCreate(req: req).throwingFlatMap { hasAccess in
             guard hasAccess else {
@@ -66,23 +88,23 @@ public extension CreateViewController {
                         }
                     }
                     let model = Model()
+                    form.write(to: model as! CreateForm.Model)
+
                     return beforeCreate(req: req, model: model, form: form)
-                        .flatMap { model in
-                            form.write(to: model as! CreateForm.Model)
-                            return model.create(on: req.db).map { model }
-                                .flatMap { model in
-                                    form.read(from: model as! CreateForm.Model)
-                                    return form.save(req: req)
-                                }
-                                .flatMap {
-                                    afterCreate(req: req, form: form, model: model)
-                                }
-                        }
+                        .flatMap { $0.create(on: req.db) }
+                        .flatMap { form.save(req: req) }
+                        .flatMap { afterCreate(req: req, form: form, model: model) }
+                        .map { form.read(from: $0 as! CreateForm.Model); return $0; }
+                        .flatMap { createResponse(req: req, form: form, model: $0) }
             }
         }
     }
     
-    func afterCreate(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Response> {
+    func afterCreate(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Model> {
+        req.eventLoop.future(model)
+    }
+
+    func createResponse(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Response> {
         renderCreateForm(req: req, form: form).encodeResponse(for: req)
     }
 

@@ -51,6 +51,28 @@ public extension UpdateViewController {
         req.eventLoop.future(model)
     }
     
+    /*
+     FLOW:
+     ----
+     check access
+     validate incoming from with token
+     create form
+     initialize form
+     process input form
+     validate form
+     if invalid:
+        -> before invalid render we can still alter the form!
+        -> render
+     else:
+     create / find the model
+     write the form content to the model
+     before update we can still alter the model
+     update
+     save form
+     after create we can alter the model
+     read the form with using new model
+     createResponse (render the form)
+     */
     func update(req: Request) throws -> EventLoopFuture<Response> {
         accessUpdate(req: req).throwingFlatMap { hasAccess in
             guard hasAccess else {
@@ -68,23 +90,22 @@ public extension UpdateViewController {
                             .flatMap { renderUpdateForm(req: req, form: $0).encodeResponse(for: req) }
                     }
                     return try find(req)
+                        .map { form.write(to: $0 as! UpdateForm.Model); return $0; }
                         .flatMap { beforeUpdate(req: req, model: $0, form: form) }
-                        .flatMap { model -> EventLoopFuture<Model> in
-                            form.write(to: model as! UpdateForm.Model)
-                            return model.update(on: req.db).map { model }
-                        }
-                        .flatMap { model in
-                            form.read(from: model as! UpdateForm.Model)
-                            return form.save(req: req).map { model }
-                        }
-                        .flatMap { model in 
-                            afterUpdate(req: req, form: form, model: model)
-                        }
+                        .flatMap { model in model.update(on: req.db).map { model } }
+                        .flatMap { model in form.save(req: req).map { model } }
+                        .flatMap { afterUpdate(req: req, form: form, model: $0) }
+                        .map { form.read(from: $0 as! UpdateForm.Model); return $0; }
+                        .flatMap { updateResponse(req: req, form: form, model: $0) }
                 }
         }
     }
 
-    func afterUpdate(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Response> {
+    func afterUpdate(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Model> {
+        req.eventLoop.future(model)
+    }
+    
+    func updateResponse(req: Request, form: UpdateForm, model: Model) -> EventLoopFuture<Response> {
         renderUpdateForm(req: req, form: form).encodeResponse(for: req)
     }
 

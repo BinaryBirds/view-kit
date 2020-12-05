@@ -7,7 +7,7 @@
 
 import ViewKit
 
-final class ExampleController: AdminViewController {
+final class ExampleController: AdminViewController {    
     
     var getView: String = ""
     var listView: String = ""

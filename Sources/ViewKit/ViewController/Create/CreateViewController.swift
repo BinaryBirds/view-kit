@@ -29,12 +29,15 @@ public protocol CreateViewController: ViewController {
     
     /// this will be called before the model is saved to the database during the create event
     func beforeCreate(req: Request, model: Model, form: CreateForm) -> EventLoopFuture<Model>
-    
+
     /// create handler for the form submission
     func create(req: Request) throws -> EventLoopFuture<Response>
     
     /// runs after the model has been created
-    func afterCreate(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Response>
+    func afterCreate(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Model>
+
+    /// returns a response after the create flow
+    func createResponse(req: Request, form: CreateForm, model: Model) -> EventLoopFuture<Response>
 
     /// setup the get and post create routes using the given builder
     func setupCreateRoutes(on: RoutesBuilder, as: PathComponent)
