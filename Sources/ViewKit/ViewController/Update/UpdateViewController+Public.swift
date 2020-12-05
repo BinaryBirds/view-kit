@@ -60,6 +60,7 @@ public extension UpdateViewController {
 
             let form = UpdateForm()
             return form.initialize(req: req)
+                .throwingFlatMap { try form.processInput(req: req) }
                 .flatMap { form.validate(req: req) }
                 .throwingFlatMap { isValid in
                     guard isValid else {
