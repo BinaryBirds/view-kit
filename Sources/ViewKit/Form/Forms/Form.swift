@@ -7,15 +7,28 @@
 
 public protocol Form: AnyObject, LeafDataRepresentable {
 
+    /// form fields
     var fields: [AbstractFormField] { get }
+    /// leaf data representation of the form fields
     var fieldsLeafData: LeafData { get }
+    
+    /// generic notification
     var notification: String? { get set }
 
     init()
 
+    /// initialize form values asynchronously
     func initialize(req: Request) -> EventLoopFuture<Void>
+    /// process input value from an incoming request
     func processInput(req: Request) throws -> EventLoopFuture<Void>
+
+    /// validate form fields
+    func validateFields() -> Bool
+    /// validate after field validation happened
+    func validateAfterFields(req: Request) -> EventLoopFuture<Bool>
+    /// validate the entire form
     func validate(req: Request) -> EventLoopFuture<Bool>
+
     func save(req: Request) -> EventLoopFuture<Void>
 }
 
@@ -49,9 +62,16 @@ public extension Form {
         }
         return isValid
     }
-    
+
+    func validateAfterFields(req: Request) -> EventLoopFuture<Bool> {
+        req.eventLoop.future(true)
+    }
+
     func validate(req: Request) -> EventLoopFuture<Bool> {
-        req.eventLoop.future(validateFields())
+        guard validateFields() else {
+            return req.eventLoop.future(false)
+        }
+        return validateAfterFields(req: req)
     }
     
     func save(req: Request) -> EventLoopFuture<Void> {
