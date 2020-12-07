@@ -81,6 +81,7 @@ public extension UpdateViewController {
             try req.validateFormToken(for: "update-form")
 
             let form = UpdateForm()
+            form.modelId = (try identifier(req) as! UpdateForm.Model.IDValue)
             return form.initialize(req: req)
                 .throwingFlatMap { try form.processInput(req: req) }
                 .flatMap { form.validate(req: req) }

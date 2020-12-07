@@ -13,6 +13,8 @@ public protocol IdentifiableViewController: ViewController {
     /// path component based on the identifier key name
     var idPathComponent: PathComponent { get }
     
+    func identifier(_ req: Request) throws -> Model.IDValue
+    
     /// find a model by identifier if not found return with a notFound error
     func find(id: Model.IDValue, req: Request) -> EventLoopFuture<Model>
     
@@ -32,13 +34,18 @@ public extension IdentifiableViewController {
 
 public extension IdentifiableViewController where Model.IDValue == UUID {
 
-    func find(_ req: Request) throws -> EventLoopFuture<Model> {
+    func identifier(_ req: Request) throws -> Model.IDValue {
         guard
             let id = req.parameters.get(idParamKey),
             let uuid = UUID(uuidString: id)
         else {
             throw Abort(.badRequest)
         }
-        return find(id: uuid, req: req)
+        return uuid
+    }
+
+    func find(_ req: Request) throws -> EventLoopFuture<Model> {
+        let id = try identifier(req)
+        return find(id: id, req: req)
     }
 }
