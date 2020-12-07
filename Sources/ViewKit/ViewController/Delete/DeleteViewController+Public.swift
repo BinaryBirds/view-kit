@@ -42,12 +42,16 @@ public extension DeleteViewController {
 
             return try find(req)
                 .flatMap { beforeDelete(req: req, model: $0) }
-                .flatMap { model in model.delete(on: req.db)
-                .flatMap { afterDelete(req: req, model: model) } }
-        }
+                .flatMap { model in model.delete(on: req.db).map { model } }
+                .flatMap { afterDelete(req: req, model: $0) } }
+                .flatMap { deleteResponse(req: req, model: $0) }
     }
-    
-    func afterDelete(req: Request, model: Model) -> EventLoopFuture<Response> {
+
+    func afterDelete(req: Request, model: Model) -> EventLoopFuture<Model> {
+        req.eventLoop.future(model)
+    }
+
+    func deleteResponse(req: Request, model: Model) -> EventLoopFuture<Response> {
         req.eventLoop.future(Response(status: .ok, version: req.version))
     }
     

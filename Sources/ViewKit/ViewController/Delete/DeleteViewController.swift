@@ -20,7 +20,10 @@ public protocol DeleteViewController: IdentifiableViewController {
     func delete(req: Request) throws -> EventLoopFuture<Response>
     
     /// this method will be called after a succesful deletion
-    func afterDelete(req: Request, model: Model) -> EventLoopFuture<Response>
+    func afterDelete(req: Request, model: Model) -> EventLoopFuture<Model>
+    
+    /// returns a response after completing the delete request
+    func deleteResponse(req: Request, model: Model) -> EventLoopFuture<Response>
     
     /// setup the get and post routes for the delete controller
     func setupDeleteRoutes(on: RoutesBuilder, as: PathComponent)

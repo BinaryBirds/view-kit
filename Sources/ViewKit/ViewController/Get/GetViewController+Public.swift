@@ -15,18 +15,22 @@ public extension GetViewController {
         req.eventLoop.future(model)
     }
 
-    func getView(req: Request) throws -> EventLoopFuture<View> {
+    func get(req: Request) throws -> EventLoopFuture<Response> {
         accessGet(req: req).throwingFlatMap { hasAccess in
             guard hasAccess else {
                 return req.eventLoop.future(error: Abort(.forbidden))
             }
             return try find(req)
                 .flatMap { beforeGet(req: req, model: $0) }
-                .flatMap { render(req: req, template: getView, context: ["model": $0.leafData]) }
+                .flatMap { getResponse(req: req, model: $0) }
         }
     }
     
+    func getResponse(req: Request, model: Model) -> EventLoopFuture<Response> {
+        render(req: req, template: getView, context: ["model": model.leafData]).encodeResponse(for: req)
+    }
+    
     func setupGetRoute(on builder: RoutesBuilder) {
-        builder.get(idPathComponent, use: getView)
+        builder.get(idPathComponent, use: get)
     }
 }

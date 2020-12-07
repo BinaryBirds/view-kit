@@ -17,7 +17,10 @@ public protocol GetViewController: IdentifiableViewController {
     func beforeGet(req: Request, model: Model) -> EventLoopFuture<Model>
     
     /// renders the get view
-    func getView(req: Request) throws -> EventLoopFuture<View>
+    func get(req: Request) throws -> EventLoopFuture<Response>
+
+    /// returns a response after the get request
+    func getResponse(req: Request, model: Model) -> EventLoopFuture<Response>
 
     /// setup get related route
     func setupGetRoute(on: RoutesBuilder)

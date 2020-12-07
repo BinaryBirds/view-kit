@@ -16,7 +16,7 @@ final class ViewKitTests: XCTestCase {
 
         let controller = ExampleController()
         let req = Request(application: app, method: .GET, url: "", on: app.eventLoopGroup.next())
-        _ = try controller.getView(req: req).wait()
+        _ = try controller.get(req: req).wait()
         XCTAssertTrue(true)
     }
 
