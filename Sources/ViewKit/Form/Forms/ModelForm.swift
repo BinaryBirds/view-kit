@@ -22,7 +22,7 @@ public extension ModelForm {
 
     var leafData: LeafData {
         var dict = fieldsLeafData.dictionary!
-        dict["modelId"] = modelId?.encodeToLeafData()
+        dict["modelId"] = modelId?.encodeToLeafData() ?? .string(nil)
         dict["notification"] = .string(notification)
         return .dictionary(dict)
     }
