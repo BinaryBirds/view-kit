@@ -16,10 +16,11 @@ public extension DeleteViewController {
             guard hasAccess else {
                 return req.eventLoop.future(error: Abort(.forbidden))
             }
+            let id = try identifier(req)
             let formId = UUID().uuidString
             let nonce = req.generateNonce(for: "delete-form", id: formId)
 
-            return try find(req).flatMap { model in
+            return findBy(id, on: req.db).flatMap { model in
                 render(req: req, template: deleteView, context: [
                     "formId": .string(formId),
                     "formToken": .string(nonce),
@@ -40,7 +41,8 @@ public extension DeleteViewController {
             }
             try req.validateFormToken(for: "delete-form")
 
-            return try find(req)
+            let id = try identifier(req)
+            return findBy(id, on: req.db)
                 .flatMap { beforeDelete(req: req, model: $0) }
                 .flatMap { model in model.delete(on: req.db).map { model } }
                 .flatMap { afterDelete(req: req, model: $0) } }

@@ -37,8 +37,10 @@ public extension UpdateViewController {
             guard hasAccess else {
                 return req.eventLoop.future(error: Abort(.forbidden))
             }
-            return try find(req).flatMap { model in
-                let form = UpdateForm()
+            let id = try identifier(req)
+            let form = UpdateForm()
+            form.modelId = (id as! UpdateForm.Model.IDValue)
+            return findBy(id, on: req.db).flatMap { model in
                 return form.initialize(req: req).flatMap {
                     form.read(from: model as! UpdateForm.Model)
                     return renderUpdateForm(req: req, form: form)
@@ -80,8 +82,10 @@ public extension UpdateViewController {
             }
             try req.validateFormToken(for: "update-form")
 
+            let id = try identifier(req)
             let form = UpdateForm()
-            form.modelId = (try identifier(req) as! UpdateForm.Model.IDValue)
+            form.modelId = (id as! UpdateForm.Model.IDValue)
+
             return form.initialize(req: req)
                 .throwingFlatMap { try form.processInput(req: req) }
                 .flatMap { form.validate(req: req) }
@@ -90,7 +94,7 @@ public extension UpdateViewController {
                         return beforeInvalidUpdateFormRender(req: req, form: form)
                             .flatMap { renderUpdateForm(req: req, form: $0).encodeResponse(for: req) }
                     }
-                    return try find(req)
+                    return findBy(id, on: req.db)
                         .map { form.write(to: $0 as! UpdateForm.Model); return $0; }
                         .flatMap { beforeUpdate(req: req, model: $0, form: form) }
                         .flatMap { model in model.update(on: req.db).map { model } }

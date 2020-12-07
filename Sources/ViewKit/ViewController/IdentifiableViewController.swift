@@ -16,10 +16,7 @@ public protocol IdentifiableViewController: ViewController {
     func identifier(_ req: Request) throws -> Model.IDValue
     
     /// find a model by identifier if not found return with a notFound error
-    func find(id: Model.IDValue, req: Request) -> EventLoopFuture<Model>
-    
-    /// finds and unwraps a model based on the identifier key
-    func find(_: Request) throws -> EventLoopFuture<Model>
+    func findBy(_ id: Model.IDValue, on: Database) -> EventLoopFuture<Model>
 }
 
 public extension IdentifiableViewController {
@@ -27,8 +24,8 @@ public extension IdentifiableViewController {
     var idParamKey: String { "id" }
     var idPathComponent: PathComponent { .init(stringLiteral: ":\(idParamKey)") }
 
-    func find(id: Model.IDValue, req: Request) -> EventLoopFuture<Model> {
-        Model.find(id, on: req.db).unwrap(or: Abort(.notFound))
+    func findBy(_ id: Model.IDValue, on db: Database) -> EventLoopFuture<Model> {
+        Model.find(id, on: db).unwrap(or: Abort(.notFound))
     }
 }
 
@@ -42,10 +39,5 @@ public extension IdentifiableViewController where Model.IDValue == UUID {
             throw Abort(.badRequest)
         }
         return uuid
-    }
-
-    func find(_ req: Request) throws -> EventLoopFuture<Model> {
-        let id = try identifier(req)
-        return find(id: id, req: req)
     }
 }

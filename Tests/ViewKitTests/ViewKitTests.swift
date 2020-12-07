@@ -10,16 +10,6 @@ import ViewKit
 
 final class ViewKitTests: XCTestCase {
     
-    func testFormView() throws {
-        let app = Application(.testing)
-        defer { app.shutdown() }
-
-        let controller = ExampleController()
-        let req = Request(application: app, method: .GET, url: "", on: app.eventLoopGroup.next())
-        _ = try controller.get(req: req).wait()
-        XCTAssertTrue(true)
-    }
-
     func testModelFormLeafDataIdentifier() throws {
         let uuid = UUID()
         let form = ExampleEditForm()

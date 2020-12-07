@@ -20,7 +20,8 @@ public extension GetViewController {
             guard hasAccess else {
                 return req.eventLoop.future(error: Abort(.forbidden))
             }
-            return try find(req)
+            let id = try identifier(req)
+            return findBy(id, on: req.db)
                 .flatMap { beforeGet(req: req, model: $0) }
                 .flatMap { getResponse(req: req, model: $0) }
         }
