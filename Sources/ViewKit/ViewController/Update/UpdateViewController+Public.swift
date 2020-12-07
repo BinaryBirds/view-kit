@@ -20,11 +20,10 @@ public extension UpdateViewController {
         let nonce = req.generateNonce(for: "update-form", id: formId)
 
         return beforeUpdateFormRender(req: req, form: form).flatMap {
-            render(req: req, template: updateView, context: [
-                "formId": .string(formId),
-                "formToken": .string(nonce),
-                "fields": form.leafData
-            ])
+            var leafData = form.leafData.dictionary!
+            leafData["formId"] = .string(formId)
+            leafData["formToken"] = .string(nonce)
+            return render(req: req, template: updateView, context: .init(leafData))
         }
     }
 

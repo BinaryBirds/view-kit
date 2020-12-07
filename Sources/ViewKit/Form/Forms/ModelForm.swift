@@ -21,10 +21,11 @@ public protocol ModelForm: Form {
 public extension ModelForm {
 
     var leafData: LeafData {
-        var dict = fieldsLeafData.dictionary!
-        dict["modelId"] = modelId?.encodeToLeafData() ?? .string(nil)
-        dict["notification"] = .string(notification)
-        return .dictionary(dict)
+        .dictionary([
+            "modelId": modelId?.encodeToLeafData() ?? .string(nil),
+            "fields": fieldsLeafData,
+            "notification": .string(notification)
+        ])
     }
     
     func didSave(req: Request, model: Model) -> EventLoopFuture<Void> {

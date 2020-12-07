@@ -41,9 +41,10 @@ public extension Form {
     }
 
     var leafData: LeafData {
-        var dict = fieldsLeafData.dictionary!
-        dict["notification"] = .string(notification)
-        return .dictionary(dict)
+        .dictionary([
+            "fields": fieldsLeafData,
+            "notification": .string(notification)
+        ])
     }
     
     func initialize(req: Request) -> EventLoopFuture<Void> {
