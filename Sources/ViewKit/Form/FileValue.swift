@@ -34,11 +34,13 @@ public final class FileValue: LeafDataRepresentable {
         }
     }
 
+    public var file: File?
     public var originalKey: String?
     public var delete: Bool
     public var temporaryFile: TemporaryFile?
 
-    public init(originalKey: String? = nil, delete: Bool = false, temporaryFile: TemporaryFile? = nil) {
+    public init(file: File? = nil, originalKey: String? = nil, delete: Bool = false, temporaryFile: TemporaryFile? = nil) {
+        self.file = file
         self.originalKey = originalKey
         self.delete = delete
         self.temporaryFile = temporaryFile
