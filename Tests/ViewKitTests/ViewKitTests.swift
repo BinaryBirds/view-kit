@@ -29,5 +29,4 @@ final class ViewKitTests: XCTestCase {
         XCTAssertEqual(form.foo.error, nil)
         XCTAssertEqual(form.bar.error, "Bar should be less than 900")
     }
-
 }

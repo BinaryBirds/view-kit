@@ -5,17 +5,14 @@
 //  Created by Tibor Bodecs on 2020. 12. 05..
 //
 
-public final class ArraySelectionFormField<Value: LeafDataRepresentable>: AbstractFormField {
+public final class ArraySelectionFormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
 
-    /// value of the form field
+    public var key: String
+    public var name: String?
+    public var error: String?
     public var values: [Value]
-
-    /// options
     public var options: [FormFieldOption]
-    
-    /// array of validators
     public var validators: [(ArraySelectionFormField<Value>) -> Bool]
-
 
     public init(key: String,
                 values: [Value] = [],
@@ -24,15 +21,15 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable>: Abstra
                 validators: [(ArraySelectionFormField<Value>) -> Bool] = [],
                 error: String? = nil)
     {
+        self.key = key
         self.values = values
         self.options = options
+        self.name = name
         self.validators = validators
-
-        super.init(key: key, name: name, error: error)
+        self.error = error
     }
 
-    /// leaf data representation of the form field
-    public override var leafData: LeafData {
+    public var leafData: LeafData {
         .dictionary([
             "key": key,
             "name": name,
@@ -42,8 +39,7 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable>: Abstra
         ])
     }
 
-    /// validates a form field
-    public override func validate() -> Bool {
+    public func validate() -> Bool {
         /// clean prevpublic override error messages
         error = nil
         /// run validators again...
@@ -53,5 +49,9 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable>: Abstra
             isValid = isValid && validator(self)
         }
         return isValid
+    }
+    
+    public func processInput(req: Request) {
+        values = req.content[key] ?? []
     }
 }
