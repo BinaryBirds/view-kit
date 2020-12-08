@@ -86,7 +86,7 @@ public extension UpdateViewController {
             form.modelId = (id as! UpdateForm.Model.IDValue)
 
             return form.initialize(req: req)
-                .throwingFlatMap { try form.processInput(req: req) }
+                .flatMap { form.process(req: req) }
                 .flatMap { form.validate(req: req) }
                 .throwingFlatMap { isValid in
                     guard isValid else {

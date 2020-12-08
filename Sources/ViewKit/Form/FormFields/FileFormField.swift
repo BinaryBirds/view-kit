@@ -49,7 +49,7 @@ public final class FileFormField: FormFieldRepresentable {
         return isValid
     }
     
-    public func processInput(req: Request) {
+    public func process(req: Request) {
         value.file = req.content[key]
         value.originalKey = req.content[key+"OriginalKey"]
         if let key: String = req.content[key+"TemporaryKey"], let name: String = req.content[key+"TemporaryName"] {

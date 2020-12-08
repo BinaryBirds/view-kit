@@ -49,7 +49,7 @@ public final class FormField<Value: LeafDataRepresentable & Decodable>: FormFiel
         return isValid
     }
     
-    public func processInput(req: Request) {
+    public func process(req: Request) {
         value = req.content[key]
     }
 }

@@ -19,5 +19,5 @@ public protocol FormFieldRepresentable: AnyObject, LeafDataRepresentable {
     func validate() -> Bool
 
     /// process input using the request
-    func processInput(req: Request)
+    func process(req: Request)
 }

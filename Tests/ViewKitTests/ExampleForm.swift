@@ -11,12 +11,6 @@ final class ExampleEditForm: ModelForm {
 
     typealias Model = ExampleModel
 
-    struct Input: Decodable {
-        var id: UUID?
-        var foo: String
-        var bar: Int
-    }
-
     // MARK: - properties
     var modelId: UUID?
     var foo = FormField<String>(key: "foo").required().length(max: 250)
@@ -30,18 +24,8 @@ final class ExampleEditForm: ModelForm {
     // MARK: - methods
 
     init() {}
-
-    func processInput(req: Request) throws -> EventLoopFuture<Void> {
-        let context = try req.content.decode(Input.self)
-        modelId = context.id
-        foo.value = context.foo
-        bar.value = context.bar
-
-        return req.eventLoop.future()
-    }
     
     func read(from model: ExampleModel )  {
-        modelId = model.id
         foo.value = model.foo
         bar.value = model.bar
     }

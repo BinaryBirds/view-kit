@@ -19,8 +19,15 @@ public protocol Form: AnyObject, LeafDataRepresentable {
 
     /// initialize form values asynchronously
     func initialize(req: Request) -> EventLoopFuture<Void>
+    
     /// process input value from an incoming request
-    func processInput(req: Request) throws -> EventLoopFuture<Void>
+    func processFields(req: Request)
+
+    /// process request from an incoming request
+    func process(req: Request) -> EventLoopFuture<Void>
+
+    /// process input value from an incoming request
+    func processAfterFields(req: Request) -> EventLoopFuture<Void>
 
     /// validate form fields
     func validateFields() -> Bool
@@ -51,8 +58,19 @@ public extension Form {
         req.eventLoop.future()
     }
     
-    func processInput(req: Request) throws -> EventLoopFuture<Void> {
+    func processFields(req: Request) {
+        for field in fields {
+            field.process(req: req)
+        }
+    }
+
+    func processAfterFields(req: Request) -> EventLoopFuture<Void> {
         req.eventLoop.future()
+    }
+
+    func process(req: Request) -> EventLoopFuture<Void> {
+        processFields(req: req)
+        return processAfterFields(req: req)
     }
     
     func validateFields() -> Bool {

@@ -53,7 +53,7 @@ public final class SelectionFormField<Value: LeafDataRepresentable & Decodable>:
         return isValid
     }
     
-    public func processInput(req: Request) {
+    public func process(req: Request) {
         value = req.content[key]
     }
 }
