@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 04. 23..
 //
 
-public final class FormField<Value: LeafDataRepresentable>: FormFieldRepresentable {
+public final class FormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
 
     public var key: String
     public var value: Value?
@@ -47,10 +47,8 @@ public final class FormField<Value: LeafDataRepresentable>: FormFieldRepresentab
             isValid = isValid && validator(self)
         }
         return isValid
-    }    
-}
-
-extension FormField where Value: Decodable {
+    }
+    
     public func processInput(req: Request) {
         value = req.content[key]
     }

@@ -25,7 +25,7 @@ public final class FileValue: LeafDataRepresentable {
             self.key = key
             self.name = name
         }
-        
+
         public var leafData: LeafData {
             .dictionary([
                 "key": key,

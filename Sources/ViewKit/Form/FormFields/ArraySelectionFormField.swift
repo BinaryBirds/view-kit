@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 12. 05..
 //
 
-public final class ArraySelectionFormField<Value: LeafDataRepresentable>: FormFieldRepresentable {
+public final class ArraySelectionFormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
 
     public var key: String
     public var name: String?
@@ -50,10 +50,7 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable>: FormFi
         }
         return isValid
     }
-}
-
-extension ArraySelectionFormField where Value: Decodable {
-
+    
     public func processInput(req: Request) {
         values = req.content[key] ?? []
     }
