@@ -67,3 +67,21 @@ public final class FileFormField: FormFieldRepresentable {
         value.delete = (try? req.content.get(Bool.self, at: deleteKey)) ?? false
     }
 }
+
+public extension FileFormField {
+    
+    func required(message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if
+                (field.value.temporaryFile == nil && field.value.delete) ||
+                (field.value.temporaryFile == nil && field.value.originalKey == nil)
+            {
+                let message = message ?? "\(name ?? key.capitalized) is required"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+}

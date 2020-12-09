@@ -92,7 +92,7 @@ public extension Form {
         }
         return validateAfterFields(req: req)
     }
-    
+
     func save(req: Request) -> EventLoopFuture<Void> {
         req.eventLoop.future()
     }

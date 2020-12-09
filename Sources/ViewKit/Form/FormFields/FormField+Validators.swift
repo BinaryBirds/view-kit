@@ -69,7 +69,19 @@ public extension FormField where Value == String {
 }
 
 public extension FormField where Value == Int {
- 
+
+    func required(message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if field.value == nil {
+                let message = message ?? "\(name ?? key.capitalized) is required"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+    
     func min(_ min: Int, message: String? = nil) -> Self {
         validators.append({ [unowned self] field -> Bool in
             if field.value == nil || field.value! < min {
