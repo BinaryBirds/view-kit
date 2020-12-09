@@ -14,6 +14,7 @@ public protocol ModelForm: Form {
     func read(from: Model)
     func write(to: Model)
 
+    func willSave(req: Request, model: Model) -> EventLoopFuture<Void>
     func didSave(req: Request, model: Model) -> EventLoopFuture<Void>
 }
 
@@ -28,6 +29,10 @@ public extension ModelForm {
         ])
     }
     
+    func willSave(req: Request, model: Model) -> EventLoopFuture<Void> {
+        req.eventLoop.future()
+    }
+
     func didSave(req: Request, model: Model) -> EventLoopFuture<Void> {
         req.eventLoop.future()
     }

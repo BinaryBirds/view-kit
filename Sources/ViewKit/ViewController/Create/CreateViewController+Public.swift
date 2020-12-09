@@ -90,7 +90,8 @@ public extension CreateViewController {
                     let model = Model()
                     form.write(to: model as! CreateForm.Model)
 
-                    return beforeCreate(req: req, model: model, form: form)
+                    return form.willSave(req: req, model: model as! CreateForm.Model)
+                        .flatMap { beforeCreate(req: req, model: model, form: form) }
                         .flatMap { model in model.create(on: req.db).map { model } }
                         .flatMap { model in form.didSave(req: req, model: model as! CreateForm.Model ).map { model } }
                         .flatMap { afterCreate(req: req, form: form, model: $0) }

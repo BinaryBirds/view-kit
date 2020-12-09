@@ -95,6 +95,7 @@ public extension UpdateViewController {
                     }
                     return findBy(id, on: req.db)
                         .map { form.write(to: $0 as! UpdateForm.Model); return $0; }
+                        .flatMap { model in form.willSave(req: req, model: model as! UpdateForm.Model).map { model } }
                         .flatMap { beforeUpdate(req: req, model: $0, form: form) }
                         .flatMap { model in model.update(on: req.db).map { model } }
                         .flatMap { model in form.didSave(req: req, model: model as! UpdateForm.Model).map { model } }
