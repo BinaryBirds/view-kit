@@ -54,6 +54,6 @@ public final class SelectionFormField<Value: LeafDataRepresentable & Decodable>:
     }
     
     public func process(req: Request) {
-        value = req.content[key]
+        value = try? req.content.get(Value.self, at: key)
     }
 }

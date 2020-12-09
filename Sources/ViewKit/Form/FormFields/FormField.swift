@@ -50,6 +50,6 @@ public final class FormField<Value: LeafDataRepresentable & Decodable>: FormFiel
     }
     
     public func process(req: Request) {
-        value = req.content[key]
+        value = try? req.content.get(Value.self, at: key)
     }
 }

@@ -52,6 +52,6 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable & Decoda
     }
     
     public func process(req: Request) {
-        values = req.content[key] ?? []
+        values = (try? req.content.get([Value].self, at: key)) ?? []
     }
 }
