@@ -50,11 +50,20 @@ public final class FileFormField: FormFieldRepresentable {
     }
     
     public func process(req: Request) {
-        value.file = req.content[key]
-        value.originalKey = req.content[key+"OriginalKey"]
-        if let key: String = req.content[key+"TemporaryKey"], let name: String = req.content[key+"TemporaryName"] {
+        
+        let originalKey = key+"OriginalKey"
+        let tempKey = key+"TemporaryKey"
+        let tempNameKey = key+"TemporaryName"
+        let deleteKey = key+"Delete"
+
+        value.file = try? req.content.get(File.self, at: key)
+        value.originalKey = try? req.content.get(String.self, at: originalKey)
+        if
+            let key = try? req.content.get(String.self, at: tempKey),
+            let name = try? req.content.get(String.self, at: tempNameKey)
+        {
             value.temporaryFile = .init(key: key, name: name)
         }
-        value.delete = req.content[key+"Delete"] ?? false
+        value.delete = (try? req.content.get(Bool.self, at: deleteKey)) ?? false
     }
 }
