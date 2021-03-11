@@ -6,7 +6,7 @@
 //
 
 /// a custom paged list with metadata information
-public struct ListPage<T>: LeafDataRepresentable where T: LeafDataRepresentable {
+public struct ListPage<T>: TemplateDataRepresentable where T: TemplateDataRepresentable {
 
     /// paged generic encodable items
     public let items: [T]
@@ -21,14 +21,14 @@ public struct ListPage<T>: LeafDataRepresentable where T: LeafDataRepresentable 
     }
 
     /// NOTE: we can only nest metadata if we init a new object...
-    public func map<U>(_ transform: (T) throws -> (U)) rethrows -> ListPage<U> where U: LeafDataRepresentable {
+    public func map<U>(_ transform: (T) throws -> (U)) rethrows -> ListPage<U> where U: TemplateDataRepresentable {
         try .init(items.map(transform), info: info)
     }
    
-    public var leafData: LeafData {
+    public var templateData: TemplateData {
         .dictionary([
-            "items": .array(items.map(\.leafData)),
-            "info": info.leafData
+            "items": .array(items.map(\.templateData)),
+            "info": info.templateData
         ])
     }
 }

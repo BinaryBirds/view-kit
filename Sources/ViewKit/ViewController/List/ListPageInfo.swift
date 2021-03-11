@@ -6,7 +6,7 @@
 //
 
 /// pagination metadata info
-public struct ListPageInfo: LeafDataRepresentable {
+public struct ListPageInfo: TemplateDataRepresentable {
 
     /// current page
     public let current: Int
@@ -22,7 +22,7 @@ public struct ListPageInfo: LeafDataRepresentable {
         self.total = total
     }
     
-    public var leafData: LeafData {
+    public var templateData: TemplateData {
         .dictionary([
             "current": .int(current),
             "limit": .int(limit),

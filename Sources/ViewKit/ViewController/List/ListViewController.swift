@@ -46,8 +46,8 @@ public protocol ListViewController: ViewController {
     /// search
     func listQuery(search: String, queryBuilder: QueryBuilder<Model>, req: Request)
     
-    /// this method is used before a page object gets rendered, you can alter the returned LeafData as needed
-    func beforeListPageRender(page: ListPage<Model>) -> LeafData
+    /// this method is used before a page object gets rendered, you can alter the returned TemplateData as needed
+    func beforeListPageRender(page: ListPage<Model>) -> TemplateData
     
     /// renders the list view
     func listView(req: Request) throws -> EventLoopFuture<View>

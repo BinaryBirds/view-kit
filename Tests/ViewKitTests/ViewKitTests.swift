@@ -10,12 +10,12 @@ import ViewKit
 
 final class ViewKitTests: XCTestCase {
     
-    func testModelFormLeafDataIdentifier() throws {
+    func testModelFormTemplateDataIdentifier() throws {
         let uuid = UUID()
         let form = ExampleEditForm()
         form.modelId = uuid
-        let data = form.leafData
-        XCTAssertEqual(data.dictionary?["modelId"], uuid.leafData)
+        let data = form.templateData
+        XCTAssertEqual(data.dictionary?["modelId"], uuid.templateData)
     }
     
     func testFormValidation() throws {

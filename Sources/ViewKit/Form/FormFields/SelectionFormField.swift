@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 12. 05..
 //
 
-public final class SelectionFormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
+public final class SelectionFormField<Value: TemplateDataRepresentable & Decodable>: FormFieldRepresentable {
 
     public var key: String
     public var name: String?
@@ -29,13 +29,13 @@ public final class SelectionFormField<Value: LeafDataRepresentable & Decodable>:
         self.error = error
     }
 
-    /// leaf data representation of the form field
-    public var leafData: LeafData {
+    /// template data representation of the form field
+    public var templateData: TemplateData {
         .dictionary([
             "key": key,
             "name": name,
             "value": value,
-            "options": options.map(\.leafData),
+            "options": options.map(\.templateData),
             "error": error,
         ])
     }
@@ -57,3 +57,58 @@ public final class SelectionFormField<Value: LeafDataRepresentable & Decodable>:
         value = try? req.content.get(Value.self, at: key)
     }
 }
+
+public extension SelectionFormField where Value == String {
+
+    func required(message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if field.value != nil {
+                let message = message ?? "\(name ?? key.capitalized) is required"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+
+    func contains(_ values: [String], message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if field.value == nil || !values.contains(field.value!) {
+                let message = message ?? "\(name ?? key.capitalized) is an invalid value"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+}
+
+public extension SelectionFormField where Value == Int {
+
+    func required(message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if field.value != nil {
+                let message = message ?? "\(name ?? key.capitalized) is required"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+    
+    func contains(_ values: [Int], message: String? = nil) -> Self {
+        validators.append({ [unowned self] field -> Bool in
+            if field.value == nil || !values.contains(field.value!) {
+                let message = message ?? "\(name ?? key.capitalized) is an invalid value"
+                field.error = message
+                return false
+            }
+            return true
+        })
+        return self
+    }
+}
+

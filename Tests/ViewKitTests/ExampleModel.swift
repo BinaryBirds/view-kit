@@ -29,9 +29,9 @@ final class ExampleModel: Model {
     }
 }
 
-extension ExampleModel: LeafDataRepresentable {
+extension ExampleModel: TemplateDataRepresentable {
 
-    var leafData: LeafData {
+    var templateData: TemplateData {
         .dictionary([
             "id": id,
             "foo": foo,

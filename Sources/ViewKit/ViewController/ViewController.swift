@@ -8,14 +8,14 @@
 
 public protocol ViewController {
     
-    associatedtype Model: Fluent.Model & LeafDataRepresentable
+    associatedtype Model: Fluent.Model & TemplateDataRepresentable
 
-    func render(req: Request, template: String, context: LeafRenderer.Context) -> EventLoopFuture<View>
+    func render(req: Request, template: String, context: Renderer.Context) -> EventLoopFuture<View>
 }
 
 public extension ViewController {
 
-    func render(req: Request, template: String, context: LeafRenderer.Context) -> EventLoopFuture<View> {
-        req.leaf.render(template: template, context: context)
+    func render(req: Request, template: String, context: Renderer.Context) -> EventLoopFuture<View> {
+        req.tau.render(template: template, context: context)
     }
 }

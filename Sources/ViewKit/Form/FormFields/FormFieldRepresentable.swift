@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 12. 05..
 //
 
-public protocol FormFieldRepresentable: AnyObject, LeafDataRepresentable {
+public protocol FormFieldRepresentable: AnyObject, TemplateDataRepresentable {
 
     var key: String { get set }
 

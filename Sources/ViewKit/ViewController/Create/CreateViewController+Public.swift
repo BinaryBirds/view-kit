@@ -20,10 +20,10 @@ public extension CreateViewController {
         let nonce = req.generateNonce(for: "create-form", id: formId)
 
         return beforeCreateFormRender(req: req, form: form).flatMap {
-            var leafData = form.leafData.dictionary!
-            leafData["formId"] = .string(formId)
-            leafData["formToken"] = .string(nonce)
-            return render(req: req, template: createView, context: .init(leafData))
+            var templateData = form.templateData.dictionary!
+            templateData["formId"] = .string(formId)
+            templateData["formToken"] = .string(nonce)
+            return render(req: req, template: createView, context: .init(templateData))
         }
     }
 

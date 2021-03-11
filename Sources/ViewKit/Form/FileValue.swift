@@ -15,9 +15,9 @@ public extension File {
 }
 
 /// represents a file data value
-public final class FileValue: LeafDataRepresentable {
+public final class FileValue: TemplateDataRepresentable {
 
-    public struct TemporaryFile: LeafDataRepresentable {
+    public struct TemporaryFile: TemplateDataRepresentable {
         public let key: String
         public let name: String
         
@@ -26,7 +26,7 @@ public final class FileValue: LeafDataRepresentable {
             self.name = name
         }
 
-        public var leafData: LeafData {
+        public var templateData: TemplateData {
             .dictionary([
                 "key": key,
                 "name": name,
@@ -46,11 +46,11 @@ public final class FileValue: LeafDataRepresentable {
         self.temporaryFile = temporaryFile
     }
 
-    public var leafData: LeafData {
+    public var templateData: TemplateData {
         .dictionary([
             "key": .string(temporaryFile?.key ?? originalKey),
             "originalKey": .string(originalKey),
-            "temporaryFile": temporaryFile.leafData,
+            "temporaryFile": temporaryFile.templateData,
             "delete": .bool(delete),
         ])
     }

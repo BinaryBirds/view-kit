@@ -24,7 +24,7 @@ final class ExampleController: AdminViewController {
         req.eventLoop.future(ExampleModel(id: UUID(), foo: "foo", bar: 1))
     }
 
-    func render(req: Request, template: String, context: LeafRenderer.Context) -> EventLoopFuture<View> {
+    func render(req: Request, template: String, context: Renderer.Context) -> EventLoopFuture<View> {
         req.eventLoop.future(View(data: ByteBuffer(string: template)))
     }
 }

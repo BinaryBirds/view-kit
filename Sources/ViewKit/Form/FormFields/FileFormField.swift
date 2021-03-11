@@ -26,8 +26,8 @@ public final class FileFormField: FormFieldRepresentable {
         self.error = error
     }
 
-    /// leaf data representation of the form field
-    public var leafData: LeafData {
+    /// template data representation of the form field
+    public var templateData: TemplateData {
         .dictionary([
             "key": key,
             "name": name,

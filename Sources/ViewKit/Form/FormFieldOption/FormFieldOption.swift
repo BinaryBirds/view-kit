@@ -17,7 +17,7 @@ public struct FormFieldOption {
         self.label = label
     }
 
-    public var leafData: LeafData {
+    public var templateData: TemplateData {
         .dictionary([
             "key": key,
             "label": label,

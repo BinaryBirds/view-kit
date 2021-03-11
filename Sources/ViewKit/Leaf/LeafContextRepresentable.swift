@@ -1,13 +1,13 @@
 //
-//  LeafContextRepresentable.swift
+//  TemplateContextRepresentable.swift
 //  ViewKit
 //
 //  Created by Tibor Bodecs on 2020. 10. 18..
 //
 
-public protocol LeafContextRepresentable {
+public protocol TemplateContextRepresentable {
 
-    var leafContext: LeafRenderer.Context { get }
+    var templateContext: Renderer.Context { get }
 }
 
 

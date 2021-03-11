@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 04. 23..
 //
 
-public final class FormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
+public final class FormField<Value: TemplateDataRepresentable & Decodable>: FormFieldRepresentable {
 
     public var key: String
     public var value: Value?
@@ -26,8 +26,8 @@ public final class FormField<Value: LeafDataRepresentable & Decodable>: FormFiel
         self.error = error
     }
 
-    /// leaf data representation of the form field
-    public var leafData: LeafData {
+    /// template data representation of the form field
+    public var templateData: TemplateData {
         .dictionary([
             "key": key,
             "name": name,

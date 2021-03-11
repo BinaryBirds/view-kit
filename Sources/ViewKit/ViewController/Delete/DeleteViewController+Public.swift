@@ -24,7 +24,7 @@ public extension DeleteViewController {
                 render(req: req, template: deleteView, context: [
                     "formId": .string(formId),
                     "formToken": .string(nonce),
-                    "model": model.leafData,
+                    "model": model.templateData,
                 ])
             }
         }

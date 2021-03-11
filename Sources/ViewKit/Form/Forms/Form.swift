@@ -5,12 +5,12 @@
 //  Created by Tibor Bodecs on 2020. 04. 22..
 //
 
-public protocol Form: AnyObject, LeafDataRepresentable {
+public protocol Form: AnyObject, TemplateDataRepresentable {
 
     /// form fields
     var fields: [FormFieldRepresentable] { get }
-    /// leaf data representation of the form fields
-    var fieldsLeafData: LeafData { get }
+    /// template data representation of the form fields
+    var fieldsTemplateData: TemplateData { get }
     
     /// generic notification
     var notification: String? { get set }
@@ -43,13 +43,13 @@ public extension Form {
     
     var fields: [FormFieldRepresentable] { [] }
 
-    var fieldsLeafData: LeafData {
-        .dictionary(fields.reduce(into: [String: LeafData]()) { $0[$1.key] = $1.leafData })
+    var fieldsTemplateData: TemplateData {
+        .dictionary(fields.reduce(into: [String: TemplateData]()) { $0[$1.key] = $1.templateData })
     }
 
-    var leafData: LeafData {
+    var templateData: TemplateData {
         .dictionary([
-            "fields": fieldsLeafData,
+            "fields": fieldsTemplateData,
             "notification": .string(notification)
         ])
     }

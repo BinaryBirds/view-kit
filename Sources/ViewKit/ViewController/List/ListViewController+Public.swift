@@ -33,8 +33,8 @@ public extension ListViewController {
         /// default implementation is empty
     }
 
-    func beforeListPageRender(page: ListPage<Model>) -> LeafData {
-        page.leafData
+    func beforeListPageRender(page: ListPage<Model>) -> TemplateData {
+        page.templateData
     }
 
     func listView(req: Request) throws -> EventLoopFuture<View> {
@@ -84,7 +84,7 @@ public extension ListViewController {
                 let totalPages = Int(ceil(Float(total) / Float(limit)))
                 return ListPage(models, info: .init(current: page, limit: limit, total: totalPages))
             }
-            /// map the page elements to Leaf values & render the list view
+            /// map the page elements to template values & render the list view
             .map { beforeListPageRender(page: $0) }
             .flatMap { render(req: req, template: listView, context: ["list": $0]) }
         }

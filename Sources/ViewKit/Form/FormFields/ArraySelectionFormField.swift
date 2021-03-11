@@ -5,7 +5,7 @@
 //  Created by Tibor Bodecs on 2020. 12. 05..
 //
 
-public final class ArraySelectionFormField<Value: LeafDataRepresentable & Decodable>: FormFieldRepresentable {
+public final class ArraySelectionFormField<Value: TemplateDataRepresentable & Decodable>: FormFieldRepresentable {
 
     public var key: String
     public var name: String?
@@ -29,12 +29,12 @@ public final class ArraySelectionFormField<Value: LeafDataRepresentable & Decoda
         self.error = error
     }
 
-    public var leafData: LeafData {
+    public var templateData: TemplateData {
         .dictionary([
             "key": key,
             "name": name,
             "values": values,
-            "options": options.map(\.leafData),
+            "options": options.map(\.templateData),
             "error": error,
         ])
     }
